@@ -314,8 +314,8 @@ local CoreFunctions = {
 
 		local CameraUpVector = __index(CurrentCamera, "CFrame").UpVector
 
-        local Top, TopOnScreen = WorldToViewportPoint(PartPosition + (PartUpVector * 1.8) + CameraUpVector)
-        local Bottom, BottomOnScreen = WorldToViewportPoint(PartPosition - (PartUpVector * 2.5) - CameraUpVector)
+		local Top, TopOnScreen = WorldToViewportPoint(PartPosition + (PartUpVector * 1.8) + CameraUpVector)
+		local Bottom, BottomOnScreen = WorldToViewportPoint(PartPosition - (PartUpVector * 2.5) - CameraUpVector)
 
 		local TopX, TopY = Top.X, Top.Y
 		local BottomX, BottomY = Bottom.X, Bottom.Y
@@ -325,8 +325,8 @@ local CoreFunctions = {
 		local BoxSize = Vector2new(mathfloor(mathmax(Height / (IsPlayer and WidthBoundary or 1), Width)), Height)
 		local BoxPosition = Vector2new(mathfloor(TopX / 2 + BottomX / 2 - BoxSize.X / 2), mathfloor(mathmin(TopY, BottomY)))
 
-        return BoxPosition, BoxSize, (TopOnScreen and BottomOnScreen)
-    end
+		return BoxPosition, BoxSize, (TopOnScreen and BottomOnScreen)
+	end
 }
 
 local UpdatingFunctions = {
@@ -1326,8 +1326,6 @@ local UtilityFunctions = {
 			end
 		end)
 
-		--print("Wrapped: ", Entry.Name)
-
 		return Entry.Hash
 	end,
 
@@ -1354,8 +1352,6 @@ local UtilityFunctions = {
 					pcall(Value.Remove, Value)
 				end
 			end)
-
-			--print("Unwrapped: ", Entry.Name)
 
 			Environment.UtilityAssets.WrappedObjects[Index] = nil
 		end
@@ -1563,14 +1559,14 @@ Environment.LoadConfiguration = function(self) -- METHOD | (<void>) => <void>
 	local Path = self.DeveloperSettings.Path
 
 	if self:RemoveAll() then
-        local Configuration, Data = ConfigLibrary:LoadConfig(Path), {}
+		local Configuration, Data = ConfigLibrary:LoadConfig(Path), {}
 
-        for _, Index in next, {"DeveloperSettings", "Settings", "Properties"} do
-            Data[#Data + 1] = ConfigLibrary:CloneTable(Configuration[Index])
-        end
+		for _, Index in next, {"DeveloperSettings", "Settings", "Properties"} do
+			Data[#Data + 1] = ConfigLibrary:CloneTable(Configuration[Index])
+		end
 
-        self.UpdateConfiguration(unpack(Data))()
-    end
+		self.UpdateConfiguration(unpack(Data))()
+	end
 end
 
 Environment.SaveConfiguration = function(self) -- METHOD | (<void>) => <void>
@@ -1579,8 +1575,8 @@ Environment.SaveConfiguration = function(self) -- METHOD | (<void>) => <void>
 	local DeveloperSettings = self.DeveloperSettings
 
 	ConfigLibrary:SaveConfig(DeveloperSettings.Path, {
-        DeveloperSettings = DeveloperSettings,
-        Settings = self.Settings,
-        Properties = self.Properties
-    })
+		DeveloperSettings = DeveloperSettings,
+		Settings = self.Settings,
+		Properties = self.Properties
+	})
 end
