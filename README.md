@@ -43,3 +43,16 @@ ExunysDeveloperESP.Properties.Crosshair.PulsingBounds = {0, 24}
 
 ExunysDeveloperESP.Properties.Crosshair.CenterDot.Color = Color3.fromHex("#FFFFFF")
 ```
+
+## Wrapping parts:
+**`ExunysDeveloperESP:WrapObject(<Instance> Object[, <string> PseudoName, <table> Allowed Visuals]) => <string> Hash`**
+```lua
+local Object = workspace.Part
+
+local Hash = ExunysDeveloperESP:WrapObject(Object, "Cool Part", {Tracer = false})
+
+task.delay(5, function()
+    ExunysDeveloperESP.UnwrapObject(Hash)
+end)
+```
+![image](https://user-images.githubusercontent.com/76539058/232104521-a47254df-1ded-4e5b-a477-bd211e6e72e7.png)
