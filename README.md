@@ -45,7 +45,9 @@ ExunysDeveloperESP.Properties.Crosshair.CenterDot.Color = Color3.fromHex("#FFFFF
 ```
 
 ## Wrapping parts:
-**`ExunysDeveloperESP:WrapObject(<Instance> Object[, <string> PseudoName, <table> Allowed Visuals]) => <string> Hash`**
+```rust
+<string> Hash | ExunysDeveloperESP:WrapObject(<Instance> Object[, <string> PseudoName, <table> Allowed Visuals])
+```
 ```lua
 local Object = workspace.Part
 
