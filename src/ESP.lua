@@ -195,7 +195,6 @@ getgenv().ExunysDeveloperESP = {
 		Chams = {
 			Enabled = false, -- Keep disabled, broken, WIP...
 			RainbowColor = false,
-			EntireBody = false, -- For R15, keep false to prevent lag
 
 			Color = Color3fromRGB(255, 255, 255),
 			Transparency = 0.2,
@@ -912,25 +911,14 @@ local CreatingFunctions = {
 		end
 
 		if Entry.RigType == "R15" then
-			if not Settings.EntireBody then
-				ChamsEntry = {
-					Head = {},
-					UpperTorso = {},
-					LeftLowerArm = {}, LeftUpperArm = {},
-					RightLowerArm = {}, RightUpperArm = {},
-					LeftLowerLeg = {}, LeftUpperLeg = {},
-					RightLowerLeg = {}, RightUpperLeg = {}
-				}
-			else
-				ChamsEntry = {
-					Head = {},
-					UpperTorso = {}, LowerTorso = {},
-					LeftLowerArm = {}, LeftUpperArm = {}, LeftHand = {},
-					RightLowerArm = {}, RightUpperArm = {}, RightHand = {},
-					LeftLowerLeg = {}, LeftUpperLeg = {}, LeftFoot = {},
-					RightLowerLeg = {}, RightUpperLeg = {}, RightFoot = {}
-				}
-			end
+			ChamsEntry = {
+				Head = {},
+				UpperTorso = {}, LowerTorso = {},
+				LeftLowerArm = {}, LeftUpperArm = {}, LeftHand = {},
+				RightLowerArm = {}, RightUpperArm = {}, RightHand = {},
+				LeftLowerLeg = {}, LeftUpperLeg = {}, LeftFoot = {},
+				RightLowerLeg = {}, RightUpperLeg = {}, RightFoot = {}
+			}
 		elseif Entry.RigType == "R6" then
 			ChamsEntry = {
 				Head = {},
