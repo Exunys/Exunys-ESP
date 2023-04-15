@@ -39,7 +39,7 @@ You can re-use / stitch this script or any system of this project into any of yo
 </details>
 <details> <summary> 15/04/2023 </summary>
 
-- [**v1.03b**] Optimizations, bug fixes, silenced errors
+- [**v1.0.3b**] Optimizations, bug fixes, silenced errors
 </details>
 
 # 👋 Introduction
