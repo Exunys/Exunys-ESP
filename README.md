@@ -48,7 +48,7 @@ First of all, to implement the module in your script's environment you must use 
 ```lua
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Exunys-ESP/main/src/ESP.lua"))()
 ```
-The code above loads the module's environment in your script executor's global environment meaning it is archivalbe across every script.
+The code above loads the module's environment in your script executor's global environment meaning it will be archivable across every script.
 
 The identificator for the environment is `ExunysDeveloperESP` which is a table that has configurable settings and interactive user functions.
 
