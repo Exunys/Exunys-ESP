@@ -37,6 +37,10 @@ You can re-use / stitch this script or any system of this project into any of yo
 
 - [**v1.0b**] First (BETA) release
 </details>
+<details> <summary> 15/04/2023 </summary>
+
+- [**v1.03b**] Optimizations, bug fixes, silenced errors
+</details>
 
 # 👋 Introduction
 
