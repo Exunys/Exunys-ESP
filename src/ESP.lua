@@ -193,7 +193,7 @@ getgenv().ExunysDeveloperESP = {
 		},
 
 		Chams = {
-			Enabled = false, -- Keep disabled, broken, WIP...
+			Enabled = true, -- Keep disabled, broken, WIP...
 			RainbowColor = false,
 
 			Color = Color3fromRGB(255, 255, 255),
@@ -615,11 +615,13 @@ local UpdatingFunctions = {
 		local ChamsEnabled, ESPEnabled = Settings.Enabled, Environment.Settings.Enabled
 		local IsReady = Entry.Checks.Ready
 
-		local CorFrame, PartSize = select(2, pcall(function()
+		local ConvertVector = CoreFunctions.ConvertVector
+
+		local _CFrame, PartSize = select(2, pcall(function()
 			return __index(Part, "CFrame"), __index(Part, "Size") / 2
 		end))
 
-		if not (ChamsEnabled and ESPEnabled and IsReady and CorFrame and PartSize and select(2, WorldToViewportPoint(CorFrame.Position))) then
+		if not (ChamsEnabled and ESPEnabled and IsReady and _CFrame and PartSize and select(2, WorldToViewportPoint(_CFrame.Position))) then
 			for Index = 1, 6 do
 				SetRenderProperty(Cham["Quad"..Index].__OBJECT, "Visible", false)
 			end
@@ -652,77 +654,73 @@ local UpdatingFunctions = {
 			end
 		end
 
-		--// Quad 1 - Front
+		local Positions = {
 
-		local PosTopLeft = WorldToViewportPoint(CorFrame * CFramenew(PartSize.X,  PartSize.Y, PartSize.Z).Position)
-		local PosTopRight = WorldToViewportPoint(CorFrame * CFramenew(-PartSize.X,  PartSize.Y, PartSize.Z).Position)
-		local PosBottomLeft = WorldToViewportPoint(CorFrame * CFramenew(PartSize.X, -PartSize.Y, PartSize.Z).Position)
-		local PosBottomRight = WorldToViewportPoint(CorFrame * CFramenew(-PartSize.X, -PartSize.Y, PartSize.Z).Position)
+			--// Quad 1 - Front
 
-		SetRenderProperty(Quads.Quad1Object, "PointA", Vector2new(PosTopLeft.X, PosTopLeft.Y))
-		SetRenderProperty(Quads.Quad1Object, "PointB", Vector2new(PosBottomLeft.X, PosBottomLeft.Y))
-		SetRenderProperty(Quads.Quad1Object, "PointC", Vector2new(PosBottomRight.X, PosBottomRight.Y))
-		SetRenderProperty(Quads.Quad1Object, "PointD", Vector2new(PosTopRight.X, PosTopRight.Y))
+			{
+				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X,  PartSize.Y, PartSize.Z).Position), -- Top Left
+				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X,  PartSize.Y, PartSize.Z).Position), -- Top Right
+				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, -PartSize.Y, PartSize.Z).Position), -- Bottom Left
+				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, -PartSize.Y, PartSize.Z).Position) -- Bottom Right
+			},
 
-		--// Quad 2 - Back
 
-		local PosTopLeft2 = WorldToViewportPoint(CorFrame * CFramenew(PartSize.X,  PartSize.Y, -PartSize.Z).Position)
-		local PosTopRight2 = WorldToViewportPoint(CorFrame * CFramenew(-PartSize.X,  PartSize.Y, -PartSize.Z).Position)
-		local PosBottomLeft2 = WorldToViewportPoint(CorFrame * CFramenew(PartSize.X, -PartSize.Y, -PartSize.Z).Position)
-		local PosBottomRight2 = WorldToViewportPoint(CorFrame * CFramenew(-PartSize.X, -PartSize.Y, -PartSize.Z).Position)
+			--// Quad 2 - Back
 
-		SetRenderProperty(Quads.Quad2Object, "PointA", Vector2new(PosTopLeft2.X, PosTopLeft2.Y))
-		SetRenderProperty(Quads.Quad2Object, "PointB", Vector2new(PosBottomLeft2.X, PosBottomLeft2.Y))
-		SetRenderProperty(Quads.Quad2Object, "PointC", Vector2new(PosBottomRight2.X, PosBottomRight2.Y))
-		SetRenderProperty(Quads.Quad2Object, "PointD", Vector2new(PosTopRight2.X, PosTopRight2.Y))
+			{
+				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X,  PartSize.Y, -PartSize.Z).Position), -- Top Left
+				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X,  PartSize.Y, -PartSize.Z).Position), -- Top Right
+				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, -PartSize.Y, -PartSize.Z).Position), -- Bottom Left
+				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, -PartSize.Y, -PartSize.Z).Position) -- Bottom Right
+			},
 
-		--// Quad 3 - Top
+			--// Quad 3 - Top
 
-		local PosTopLeft3 = WorldToViewportPoint(CorFrame * CFramenew(PartSize.X,  PartSize.Y, PartSize.Z).Position)
-		local PosTopRight3 = WorldToViewportPoint(CorFrame * CFramenew(-PartSize.X, PartSize.Y, PartSize.Z).Position)
-		local PosBottomLeft3 = WorldToViewportPoint(CorFrame * CFramenew(PartSize.X, PartSize.Y, -PartSize.Z).Position)
-		local PosBottomRight3 = WorldToViewportPoint(CorFrame * CFramenew(-PartSize.X, PartSize.Y, -PartSize.Z).Position)
+			{
+				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X,  PartSize.Y, PartSize.Z).Position), -- Top Left
+				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, PartSize.Y, PartSize.Z).Position), -- Top Right
+				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, PartSize.Y, -PartSize.Z).Position), -- Bottom Left
+				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, PartSize.Y, -PartSize.Z).Position) -- Bottom Right
+			},
 
-		SetRenderProperty(Quads.Quad3Object, "PointA", Vector2new(PosTopLeft3.X, PosTopLeft3.Y))
-		SetRenderProperty(Quads.Quad3Object, "PointB", Vector2new(PosBottomLeft3.X, PosBottomLeft3.Y))
-		SetRenderProperty(Quads.Quad3Object, "PointC", Vector2new(PosBottomRight3.X, PosBottomRight3.Y))
-		SetRenderProperty(Quads.Quad3Object, "PointD", Vector2new(PosTopRight3.X, PosTopRight3.Y))
+			--// Quad 4 - Bottom
 
-		--// Quad 4 - Bottom
+			{
+				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X,  -PartSize.Y, PartSize.Z).Position), -- Top Left
+				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, -PartSize.Y, PartSize.Z).Position), -- Top Right
+				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, -PartSize.Y, -PartSize.Z).Position), -- Bottom Left
+				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, -PartSize.Y, -PartSize.Z).Position) -- Bottom Right
+			},
 
-		local PosTopLeft4 = WorldToViewportPoint(CorFrame * CFramenew(PartSize.X,  -PartSize.Y, PartSize.Z).Position)
-		local PosTopRight4 = WorldToViewportPoint(CorFrame * CFramenew(-PartSize.X, -PartSize.Y, PartSize.Z).Position)
-		local PosBottomLeft4 = WorldToViewportPoint(CorFrame * CFramenew(PartSize.X, -PartSize.Y, -PartSize.Z).Position)
-		local PosBottomRight4 = WorldToViewportPoint(CorFrame * CFramenew(-PartSize.X, -PartSize.Y, -PartSize.Z).Position)
+			--// Quad 5 - Right
 
-		SetRenderProperty(Quads.Quad4Object, "PointA", Vector2new(PosTopLeft4.X, PosTopLeft4.Y))
-		SetRenderProperty(Quads.Quad4Object, "PointB", Vector2new(PosBottomLeft4.X, PosBottomLeft4.Y))
-		SetRenderProperty(Quads.Quad4Object, "PointC", Vector2new(PosBottomRight4.X, PosBottomRight4.Y))
-		SetRenderProperty(Quads.Quad4Object, "PointD", Vector2new(PosTopRight4.X, PosTopRight4.Y))
+			{
+				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X,  PartSize.Y, PartSize.Z).Position), -- Top Left
+				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, PartSize.Y, -PartSize.Z).Position), -- Top Right
+				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, -PartSize.Y, PartSize.Z).Position), -- Bottom Left
+				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, -PartSize.Y, -PartSize.Z).Position) -- Bottom Right
+			},
 
-		--// Quad 5 - Right
+			--// Quad 6 - Left
 
-		local PosTopLeft5 = WorldToViewportPoint(CorFrame * CFramenew(PartSize.X,  PartSize.Y, PartSize.Z).Position)
-		local PosTopRight5 = WorldToViewportPoint(CorFrame * CFramenew(PartSize.X, PartSize.Y, -PartSize.Z).Position)
-		local PosBottomLeft5 = WorldToViewportPoint(CorFrame * CFramenew(PartSize.X, -PartSize.Y, PartSize.Z).Position)
-		local PosBottomRight5 = WorldToViewportPoint(CorFrame * CFramenew(PartSize.X, -PartSize.Y, -PartSize.Z).Position)
+			{
+				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X,  PartSize.Y, PartSize.Z).Position), -- Top Left
+				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, PartSize.Y, -PartSize.Z).Position), -- Top Right
+				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, -PartSize.Y, PartSize.Z).Position), -- Bottom Left
+				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, -PartSize.Y, -PartSize.Z).Position) -- Bottom Right
+			}
+		}
 
-		SetRenderProperty(Quads.Quad5Object, "PointA", Vector2new(PosTopLeft5.X, PosTopLeft5.Y))
-		SetRenderProperty(Quads.Quad5Object, "PointB", Vector2new(PosBottomLeft5.X, PosBottomLeft5.Y))
-		SetRenderProperty(Quads.Quad5Object, "PointC", Vector2new(PosBottomRight5.X, PosBottomRight5.Y))
-		SetRenderProperty(Quads.Quad5Object, "PointD", Vector2new(PosTopRight5.X, PosTopRight5.Y))
+		local Indexes = {1, 3, 4, 2}
 
-		--// Quad 6 - Left
+		for Index = 1, 6 do
+			local RenderObject = Quads["Quad"..Index.."Object"]
 
-		local PosTopLeft6 = WorldToViewportPoint(CorFrame * CFramenew(-PartSize.X,  PartSize.Y, PartSize.Z).Position)
-		local PosTopRight6 = WorldToViewportPoint(CorFrame * CFramenew(-PartSize.X, PartSize.Y, -PartSize.Z).Position)
-		local PosBottomLeft6 = WorldToViewportPoint(CorFrame * CFramenew(-PartSize.X, -PartSize.Y, PartSize.Z).Position)
-		local PosBottomRight6 = WorldToViewportPoint(CorFrame * CFramenew(-PartSize.X, -PartSize.Y, -PartSize.Z).Position)
-
-		SetRenderProperty(Quads.Quad6Object, "PointA", Vector2new(PosTopLeft6.X, PosTopLeft6.Y))
-		SetRenderProperty(Quads.Quad6Object, "PointB", Vector2new(PosBottomLeft6.X, PosBottomLeft6.Y))
-		SetRenderProperty(Quads.Quad6Object, "PointC", Vector2new(PosBottomRight6.X, PosBottomRight6.Y))
-		SetRenderProperty(Quads.Quad6Object, "PointD", Vector2new(PosTopRight6.X, PosTopRight6.Y))
+			for _Index = 1, 4 do
+				SetRenderProperty(RenderObject, "Point"..stringchar(_Index + 64), ConvertVector(Positions[Index][Indexes[_Index]]))
+			end
+		end
 	end
 }
 
@@ -898,17 +896,8 @@ local CreatingFunctions = {
 
 		local Object = Entry.Object
 		local ChamsEntry = Entry.Visuals.Chams
-		local Settings = Environment.Properties.Chams
 
-		for _, Value in next, ChamsEntry do
-			for Index = 1, 6 do
-				local Quad = Value["Quad"..Index]
-
-				if Quad then
-					pcall(Quad.Remove, Quad)
-				end
-			end
-		end
+		repeat wait(0) until (Entry.IsAPlayer and Entry.RigType ~= "N/A") or (not Entry.IsAPlayer and Entry.RigType == "N/A")
 
 		if Entry.RigType == "R15" then
 			ChamsEntry = {
@@ -928,7 +917,7 @@ local CreatingFunctions = {
 				["Left Leg"] = {},
 				["Right Leg"] = {}
 			}
-		else
+		elseif not Entry.IsAPlayer then
 			ChamsEntry[__index(Object, "Name")] = {}
 		end
 
@@ -1211,6 +1200,10 @@ local UtilityFunctions = {
 			end
 
 			Checks.Ready = Checks.Alive and Checks.Team and not Settings.PartsOnly
+
+			if Checks.Ready then
+				Entry.RigType = Humanoid and (__index(Humanoid, "RigType") == 0 and "R6" or "R15") or "N/A"
+			end
 		end)
 	end,
 
@@ -1243,13 +1236,16 @@ local UtilityFunctions = {
 
 		local Entry = {
 			Hash = CoreFunctions.GenerateHash(0x100),
-			IsAPlayer = IsA(Object, "Player"),
+
 			Object = Object,
-			PartHasCharacter = false,
+			Allowed = Allowed,
 			Name = PseudoName or __index(Object, "Name"),
 			DisplayName = PseudoName or __index(Object, (IsA(Object, "Player") and "Display" or "").."Name"),
+
+			IsAPlayer = IsA(Object, "Player"),
+			PartHasCharacter = false,
 			RigType = "N/A",
-			Allowed = Allowed,
+
 			Connections = {},
 
 			Checks = {
@@ -1263,8 +1259,7 @@ local UtilityFunctions = {
 				Tracer = {},
 				Box = {},
 				HealthBar = {},
-				HeadDot = {},
-				Chams = {}
+				HeadDot = {}
 			}
 		}
 
@@ -1547,13 +1542,15 @@ Environment.LoadConfiguration = function(self) -- METHOD | (<void>) => <void>
 	local Path = self.DeveloperSettings.Path
 
 	if self:RemoveAll() then
-		local Configuration, Data = ConfigLibrary:LoadConfig(Path), {}
+		pcall(function()
+			local Configuration, Data = ConfigLibrary:LoadConfig(Path), {}
 
-		for _, Index in next, {"DeveloperSettings", "Settings", "Properties"} do
-			Data[#Data + 1] = ConfigLibrary:CloneTable(Configuration[Index])
-		end
+			for _, Index in next, {"DeveloperSettings", "Settings", "Properties"} do
+				Data[#Data + 1] = ConfigLibrary:CloneTable(Configuration[Index])
+			end
 
-		self.UpdateConfiguration(unpack(Data))()
+			self.UpdateConfiguration(unpack(Data))()
+		end)
 	end
 end
 
