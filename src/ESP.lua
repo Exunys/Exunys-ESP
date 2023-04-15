@@ -193,7 +193,7 @@ getgenv().ExunysDeveloperESP = {
 		},
 
 		Chams = {
-			Enabled = true, -- Keep disabled, broken, WIP...
+			Enabled = false, -- Keep disabled, broken, WIP...
 			RainbowColor = false,
 
 			Color = Color3fromRGB(255, 255, 255),
@@ -726,7 +726,9 @@ local UpdatingFunctions = {
 
 local CreatingFunctions = {
 	ESP = function(Entry)
-		if type(Entry.Allowed) == "table" and type(Entry.Allowed.ESP) == "boolean" and not Entry.Allowed.ESP then
+		local Allowed = Entry.Allowed
+
+		if type(Allowed) == "table" and type(Allowed.ESP) == "boolean" and not Allowed.ESP then
 			return
 		end
 
@@ -758,7 +760,9 @@ local CreatingFunctions = {
 	end,
 
 	Tracer = function(Entry)
-		if type(Entry.Allowed) == "table" and type(Entry.Allowed.Tracer) == "boolean" and not Entry.Allowed.Tracer then
+		local Allowed = Entry.Allowed
+
+		if type(Allowed) == "table" and type(Allowed.Tracer) == "boolean" and not Allowed.Tracer then
 			return
 		end
 
@@ -788,7 +792,9 @@ local CreatingFunctions = {
 	end,
 
 	HeadDot = function(Entry)
-		if type(Entry.Allowed) == "table" and type(Entry.Allowed.HeadDot) == "boolean" and not Entry.Allowed.HeadDot then
+		local Allowed = Entry.Allowed
+
+		if type(Allowed) == "table" and type(Allowed.HeadDot) == "boolean" and not Allowed.HeadDot then
 			return
 		end
 
@@ -824,7 +830,9 @@ local CreatingFunctions = {
 	end,
 
 	Box = function(Entry)
-		if type(Entry.Allowed) == "table" and type(Entry.Allowed.Box) == "boolean" and not Entry.Allowed.Box then
+		local Allowed = Entry.Allowed
+
+		if type(Allowed) == "table" and type(Allowed.Box) == "boolean" and not Allowed.Box then
 			return
 		end
 
@@ -854,7 +862,9 @@ local CreatingFunctions = {
 	end,
 
 	HealthBar = function(Entry)
-		if type(Entry.Allowed) == "table" and type(Entry.Allowed.HealthBar) == "boolean" and not Entry.Allowed.HealthBar then
+		local Allowed = Entry.Allowed
+
+		if type(Allowed) == "table" and type(Allowed.HealthBar) == "boolean" and not Allowed.HealthBar then
 			return
 		end
 
@@ -890,7 +900,9 @@ local CreatingFunctions = {
 	end,
 
 	Chams = function(Entry)
-		if type(Entry.Allowed) == "table" and type(Entry.Allowed.Chams) == "boolean" and not Entry.Allowed.Chams then
+		local Allowed = Entry.Allowed
+
+		if type(Allowed) == "table" and type(Allowed.Chams) == "boolean" and not Allowed.Chams then
 			return
 		end
 
