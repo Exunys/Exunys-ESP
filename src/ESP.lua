@@ -964,8 +964,6 @@ local CreatingFunctions = {
 		local Object = Entry.Object
 		local ChamsEntry = Entry.Visuals.Chams
 
-		repeat wait(0) until (Entry.IsAPlayer and Entry.RigType ~= "N/A") or (not Entry.IsAPlayer and Entry.RigType == "N/A")
-
 		if Entry.RigType == "R15" then
 			ChamsEntry = {
 				Head = {},
