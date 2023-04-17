@@ -32,15 +32,13 @@ This project also uses [Exunys' Config Library](https://github.com/Exunys/Config
 This project is completely free and open sourced. But, that does not mean you own rights to it. Read this [document](https://github.com/Exunys/Exunys-ESP/blob/main/LICENSE) for more information.
 You can re-use / stitch this script or any system of this project into any of your repositories, as long as you credit the developer [Exunys](https://github.com/Exunys).
 
-## 📑 Update log (DD/MM/YYYY):
+## 📑 Update log (DD/MM/YYYY): 
+
 <details> <summary> 14/04/2023 </summary>
 
-- [**v1.0b**] First (BETA) release
-</details>
-<details> <summary> 15/04/2023 </summary>
-
-- [**v1.0.3b**] Optimizations, bug fixes, silenced errors
-</details>
+- [**v1.0b**] First (BETA) release </details> <details> <summary> 15/04/2023 </summary>
+- [**v1.0.3b**] Optimizations, bug fixes, silenced errors </details> <details> <summary> 18/04/2023 </summary>
+- [**v1.0.7b**] Optimizations & bug fixes </details>
 
 # 👋 Introduction
 
@@ -91,12 +89,12 @@ getgenv().ExunysDeveloperESP = {
 			RainbowOutlineColor = false,
 			Offset = 10,
 
-			Color = Color3fromRGB(255, 255, 255),
+			Color = Color3.fromRGB(255, 255, 255),
 			Transparency = 1,
 			Size = 14,
 			Font = DrawingFonts.System, -- UI, System, Plex, Monospace
 
-			OutlineColor = Color3fromRGB(0, 0, 0),
+			OutlineColor = Color3.fromRGB(0, 0, 0),
 			Outline = true,
 
 			DisplayDistance = true,
@@ -114,10 +112,10 @@ getgenv().ExunysDeveloperESP = {
 
 			Transparency = 1,
 			Thickness = 1,
-			Color = Color3fromRGB(255, 255, 255),
+			Color = Color3.fromRGB(255, 255, 255),
 
 			Outline = true,
-			OutlineColor = Color3fromRGB(0, 0, 0)
+			OutlineColor = Color3.fromRGB(0, 0, 0)
 		},
 
 		HeadDot = {
@@ -125,13 +123,13 @@ getgenv().ExunysDeveloperESP = {
 			RainbowColor = false,
 			RainbowOutlineColor = false,
 
-			Color = Color3fromRGB(255, 255, 255),
+			Color = Color3.fromRGB(255, 255, 255),
 			Transparency = 1,
 			Thickness = 1,
 			NumSides = 30,
 			Filled = false,
 
-			OutlineColor = Color3fromRGB(0, 0, 0),
+			OutlineColor = Color3.fromRGB(0, 0, 0),
 			Outline = true
 		},
 
@@ -140,12 +138,12 @@ getgenv().ExunysDeveloperESP = {
 			RainbowColor = false,
 			RainbowOutlineColor = false,
 
-			Color = Color3fromRGB(255, 255, 255),
+			Color = Color3.fromRGB(255, 255, 255),
 			Transparency = 1,
 			Thickness = 1,
 			Filled = false,
 
-			OutlineColor = Color3fromRGB(0, 0, 0),
+			OutlineColor = Color3.fromRGB(0, 0, 0),
 			Outline = true
 		},
 
@@ -159,7 +157,7 @@ getgenv().ExunysDeveloperESP = {
 			Thickness = 1,
 			Transparency = 1,
 
-			OutlineColor = Color3fromRGB(0, 0, 0),
+			OutlineColor = Color3.fromRGB(0, 0, 0),
 			Outline = true
 		},
 
@@ -167,7 +165,7 @@ getgenv().ExunysDeveloperESP = {
 			Enabled = false, -- Keep disabled, broken, WIP...
 			RainbowColor = false,
 
-			Color = Color3fromRGB(255, 255, 255),
+			Color = Color3.fromRGB(255, 255, 255),
 			Transparency = 0.2,
 			Thickness = 1,
 			Filled = true
@@ -193,11 +191,11 @@ getgenv().ExunysDeveloperESP = {
 			PulsingSpeed = 5,
 			PulsingBounds = {4, 8}, -- {...}[1] => GapSize Min; {...}[2] => GapSize Max
 
-			Color = Color3fromRGB(0, 255, 0),
+			Color = Color3.fromRGB(0, 255, 0),
 			Thickness = 1,
 			Transparency = 1,
 
-			OutlineColor = Color3fromRGB(0, 0, 0),
+			OutlineColor = Color3.fromRGB(0, 0, 0),
 			Outline = true,
 
 			CenterDot = {
@@ -207,13 +205,13 @@ getgenv().ExunysDeveloperESP = {
 
 				Radius = 2,
 
-				Color = Color3fromRGB(0, 255, 0),
+				Color = Color3.fromRGB(0, 255, 0),
 				Transparency = 1,
 				Thickness = 1,
 				NumSides = 60,
 				Filled = false,
 
-				OutlineColor = Color3fromRGB(0, 0, 0),
+				OutlineColor = Color3.fromRGB(0, 0, 0),
 				Outline = true
 			}
 		}
@@ -224,9 +222,7 @@ getgenv().ExunysDeveloperESP = {
 ```
 </details>
 
-# Documentation is a WIP. More information soon.
-
-Previews:
+<details> <summary> Previews </summary>
 
 ![image](https://user-images.githubusercontent.com/76539058/232103151-42664a64-a942-46ad-8883-ae1fe1ac7e81.png) (ESP with factory settings)
 
@@ -259,17 +255,57 @@ CrosshairProperties.PulsingBounds = {0, 24}
 CrosshairProperties.CenterDot.Color = Color3.fromHex("#FFFFFF")
 ```
 
-## Wrapping parts:
+</details>
+
+# Documentation is a WIP. More information soon.
+
+## Wrapping & unwrapping Parts / NPCs
+Wrapping objects:
 ```rust
-<string> Hash | ExunysDeveloperESP:WrapObject(<Instance> Object[, <string> Pseudo Name, <table> Allowed Visuals])
+<string> Hash | ExunysDeveloperESP.WrapObject(<Instance> Object[, <string> Pseudo Name, <table> Allowed Visuals])
 ```
+Unwrapping objects:
+```rust
+<void> | ExunysDeveloperESP.UnwrapObject(<Instance/string> Object / Hash)
+```
+
+### ❗ Notice
+It is more recommended you store & parse hashes (given from the WrapObject function) for unwrapping for more precise results.
+
+For players, the function `WrapObject` will only wrap & work on the parsed player object *(class type: player)* if the player has a character archievable by `OBJECT.Character`.
+
+<details> <summary> Code example </summary>
+
 ```lua
-local Object = workspace.Part
+for Index, Value in next, workspace.Landmines:GetChildren() do
+	local Part = Value:IsA("Model") and gethiddenproperty(Value, "PrimaryPart")
+    
+	if not Part then
+		continue 
+	end
+    
+	local Hash = ExunysDeveloperESP.WrapObject(Part, "Landmine "..Index, {Tracer = false})
 
-local Hash = ExunysDeveloperESP:WrapObject(Object, "Cool Part", {Tracer = false})
-
-task.delay(5, function()
-    ExunysDeveloperESP.UnwrapObject(Hash)
-end)
+	task.delay(3, function()
+		ExunysDeveloperESP.UnwrapObject(Hash)
+	end)
+end
 ```
-![image](https://user-images.githubusercontent.com/76539058/232104521-a47254df-1ded-4e5b-a477-bd211e6e72e7.png)
+
+https://user-images.githubusercontent.com/76539058/232627964-8230c006-770c-4f8a-a101-b5c2fd2e5d91.mp4
+
+</details>
+
+These 2 functions also apply to players & NPCs (anything with a character).
+
+<details> <summary> Code example </summary>
+
+```lua
+ExunysDeveloperESP.WrapObject(workspace.Dummys.Dummy, "Dumb Dummy")
+
+-- The object parsed in the first parameter is a model that has a R15 character rig and a humanoid (which it must contain)
+```
+
+https://user-images.githubusercontent.com/76539058/232631988-18d8a058-db4a-4d24-b7e1-ff7909ef527e.mp4
+
+</details>
