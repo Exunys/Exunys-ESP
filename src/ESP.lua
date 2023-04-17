@@ -99,6 +99,7 @@ getgenv().ExunysDeveloperESP = {
 	DeveloperSettings = {
 		Path = "Exunys Developer/Exunys ESP/Configuration.cfg",
 		UnwrapOnCharacterAbsence = false,
+		UnwrapObjectOnParentNewIndex = false,
 		UpdateMode = "RenderStepped",
 		TeamCheckOption = "TeamColor",
 		RainbowSpeed = 1, -- Bigger = Slower
@@ -1301,6 +1302,7 @@ local UtilityFunctions = {
 			return
 		end
 
+		local DeveloperSettings = Environment.DeveloperSettings
 		local WrappedObjects = Environment.UtilityAssets.WrappedObjects
 
 		for _, Value in next, WrappedObjects do
@@ -1313,6 +1315,7 @@ local UtilityFunctions = {
 			Hash = CoreFunctions.GenerateHash(0x100),
 
 			Object = Object,
+			OldParent = __index(Object, "Parent"),
 			Allowed = Allowed,
 			Name = PseudoName or __index(Object, "Name"),
 			DisplayName = PseudoName or __index(Object, (IsA(Object, "Player") and "Display" or "").."Name"),
@@ -1353,6 +1356,12 @@ local UtilityFunctions = {
 					self.UnwrapObject(nil, Entry.Hash)
 				end
 			end)
+
+			Entry.Connections.UnwrapOnParentChange = Connect(Entry.Object.Changed, function(Property)
+				if Property == "Parent" and __index(Entry.Object, Property) ~= Entry.OldParent and DeveloperSettings.UnwrapObjectOnParentNewIndex then
+					self.UnwrapObject(nil, Entry.Hash)
+				end
+			end)
 		end
 
 		local Humanoid = Entry.IsAPlayer and FindFirstChildOfClass(__index(Entry.Object, "Character"), "Humanoid") or FindFirstChildOfClass(__index(Entry.Object, "Parent"), "Humanoid")
@@ -1372,7 +1381,7 @@ local UtilityFunctions = {
 		WrappedObjects[#WrappedObjects + 1] = Entry
 
 		Entry.Connections.UnwrapSignal = Connect(Entry.Object.Changed, function(Property)
-			if Environment.DeveloperSettings.UnwrapOnCharacterAbsence and Property == "Parent" and not IsDescendantOf(__index(Entry.Object, (Entry.IsAPlayer and "Character" or Property)), Workspace) then
+			if DeveloperSettings.UnwrapOnCharacterAbsence and Property == "Parent" and not IsDescendantOf(__index(Entry.Object, (Entry.IsAPlayer and "Character" or Property)), Workspace) then
 				self.UnwrapObject(nil, Entry.Hash)
 			end
 		end)
