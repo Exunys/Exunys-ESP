@@ -272,7 +272,7 @@ Unwrapping objects:
 ### ❗ Notice
 It is more recommended you store & parse hashes (given from the WrapObject function) for unwrapping for more precise results.
 
-For players, the function `WrapObject` will only wrap & work on the parsed player object *(class type: player)* if the player has a character archievable by `OBJECT.Character`.
+For players, the function `WrapObject` will only wrap & work on the parsed player object *(class type: "**Player**")* if the player has a character archievable by `OBJECT.Character`.
 
 <details> <summary> Code example </summary>
 
