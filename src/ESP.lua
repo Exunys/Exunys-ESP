@@ -111,7 +111,7 @@ getgenv().ExunysDeveloperESP = {
 		PartsOnly = false,
 		TeamCheck = false,
 		AliveCheck = true,
-		LoadConfigOnLaunch = false,
+		LoadConfigOnLaunch = true,
 	},
 
 	Properties = {
