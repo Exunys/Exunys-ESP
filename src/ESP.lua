@@ -83,7 +83,7 @@ end
 
 TemporaryDrawing.Remove(TemporaryDrawing)
 
-local Inf, Nan = 1 / 0, 0 / 0
+local Inf, Nan, Loaded = 1 / 0, 0 / 0, false
 
 --// Checking for multiple processes
 
@@ -750,7 +750,18 @@ local CreatingFunctions = {
 		Entry.Visuals.ESP[2] = BottomText
 
 		Entry.Connections.ESP = Connect(__index(RunService, Environment.DeveloperSettings.UpdateMode), function()
-			if Environment.Settings.Enabled and Settings.Enabled and Entry.Checks.Ready then
+			local Functionable, Ready = pcall(function()
+				return Environment.Settings.Enabled and Settings.Enabled and Entry.Checks.Ready
+			end)
+
+			if not Functionable then
+				pcall(TopText.Remove, TopText)
+				pcall(BottomText.Remove, BottomText)
+
+				return Disconnect(Entry.Connections.ESP)
+			end
+
+			if Ready then
 				UpdatingFunctions.ESP(Entry, TopTextObject, BottomTextObject)
 			else
 				SetRenderProperty(TopTextObject, "Visible", false)
@@ -782,7 +793,18 @@ local CreatingFunctions = {
 		Entry.Visuals.Tracer[2] = TracerOutline
 
 		Entry.Connections.Tracer = Connect(__index(RunService, Environment.DeveloperSettings.UpdateMode), function()
-			if Environment.Settings.Enabled and Settings.Enabled and Entry.Checks.Ready then
+			local Functionable, Ready = pcall(function()
+				return Environment.Settings.Enabled and Settings.Enabled and Entry.Checks.Ready
+			end)
+
+			if not Functionable then
+				pcall(Tracer.Remove, Tracer)
+				pcall(TracerOutline.Remove, TracerOutline)
+
+				return Disconnect(Entry.Connections.Tracer)
+			end
+
+			if Ready then
 				UpdatingFunctions.Tracer(Entry, TracerObject, TracerOutlineObject)
 			else
 				SetRenderProperty(TracerObject, "Visible", false)
@@ -820,7 +842,18 @@ local CreatingFunctions = {
 		Entry.Visuals.HeadDot[2] = CircleOutline
 
 		Entry.Connections.HeadDot = Connect(__index(RunService, Environment.DeveloperSettings.UpdateMode), function()
-			if Environment.Settings.Enabled and Settings.Enabled and Entry.Checks.Ready then
+			local Functionable, Ready = pcall(function()
+				return Environment.Settings.Enabled and Settings.Enabled and Entry.Checks.Ready
+			end)
+
+			if not Functionable then
+				pcall(Circle.Remove, Circle)
+				pcall(CircleOutline.Remove, CircleOutline)
+
+				return Disconnect(Entry.Connections.HeadDot)
+			end
+
+			if Ready then
 				UpdatingFunctions.HeadDot(Entry, CircleObject, CircleOutlineObject)
 			else
 				SetRenderProperty(CircleObject, "Visible", false)
@@ -852,7 +885,18 @@ local CreatingFunctions = {
 		Entry.Visuals.Box[2] = BoxOutline
 
 		Entry.Connections.Box = Connect(__index(RunService, Environment.DeveloperSettings.UpdateMode), function()
-			if Environment.Settings.Enabled and Settings.Enabled and Entry.Checks.Ready then
+			local Functionable, Ready = pcall(function()
+				return Environment.Settings.Enabled and Settings.Enabled and Entry.Checks.Ready
+			end)
+
+			if not Functionable then
+				pcall(Box.Remove, Box)
+				pcall(BoxOutline.Remove, BoxOutline)
+
+				return Disconnect(Entry.Connections.Box)
+			end
+
+			if Ready then
 				UpdatingFunctions.Box(Entry, BoxObject, BoxOutlineObject)
 			else
 				SetRenderProperty(BoxObject, "Visible", false)
@@ -890,7 +934,18 @@ local CreatingFunctions = {
 		Entry.Visuals.HealthBar[2] = Outline
 
 		Entry.Connections.HealthBar = Connect(__index(RunService, Environment.DeveloperSettings.UpdateMode), function()
-			if Environment.Settings.Enabled and Settings.Enabled and Entry.Checks.Ready then
+			local Functionable, Ready = pcall(function()
+				return Environment.Settings.Enabled and Settings.Enabled and Entry.Checks.Ready
+			end)
+
+			if not Functionable then
+				pcall(Main.Remove, Main)
+				pcall(Outline.Remove, Outline)
+
+				return Disconnect(Entry.Connections.HealthBar)
+			end
+
+			if Ready then
 				UpdatingFunctions.HealthBar(Entry, MainObject, OutlineObject, Humanoid)
 			else
 				SetRenderProperty(MainObject, "Visible", false)
@@ -930,7 +985,17 @@ local CreatingFunctions = {
 				["Right Leg"] = {}
 			}
 		elseif not Entry.IsAPlayer then
-			ChamsEntry[__index(Object, "Name")] = {}
+			local Cancel = false
+
+			xpcall(function()
+				ChamsEntry[__index(Object, "Name")] = {}
+			end, function()
+				Cancel = true
+			end)
+
+			if Cancel then
+				return
+			end
 		end
 
 		for _, Value in next, ChamsEntry do
@@ -1088,7 +1153,7 @@ local CreatingFunctions = {
 
 						local From, To = GetRenderProperty(_Value, "From"), GetRenderProperty(_Value, "To")
 
-						if not Settings.Rotate then
+						if not (Settings.Rotate and Settings.RotationSpeed <= 5) then
 							if Index == "TopLine" then
 								SetRenderProperty(Value, "From", Vector2new(From.X, From.Y + 1))
 								SetRenderProperty(Value, "To", Vector2new(To.X, To.Y - 1))
@@ -1278,11 +1343,9 @@ local UtilityFunctions = {
 		repeat wait(0) until Entry.IsAPlayer and FindFirstChildOfClass(__index(Entry.Object, "Character"), "Humanoid") or true
 
 		if not Entry.IsAPlayer then
-			local _, ErrorMessage = pcall(function()
-				local Position, CFrame = __index(Entry.Object, "Position"), __index(Entry.Object, "CFrame")
-			end)
-
-			if ErrorMessage then
+			if not pcall(function()
+				return __index(Entry.Object, "Position"), __index(Entry.Object, "CFrame")
+			end) then
 				warn("EXUNYS_ESP > UtilityFunctions.WrapObject - Attempted to wrap object of an unsupported class type: \""..(__index(Entry.Object, "ClassName") or "N / A").."\"")
 				return self.UnwrapObject(Entry.Hash)
 			end
@@ -1306,12 +1369,7 @@ local UtilityFunctions = {
 		CreatingFunctions.HealthBar(Entry)
 		Entry.Visuals.Chams = CreatingFunctions.Chams(Entry)
 
-		xpcall(function()
-			self:InitChecks(Entry)
-		end, function()
-			self = UtilityFunctions
-			self:InitChecks(Entry)
-		end)
+		self:InitChecks(Entry)
 
 		WrappedObjects[#WrappedObjects + 1] = Entry
 
@@ -1418,6 +1476,11 @@ end
 
 setmetatable(Environment, {
 	__call = function()
+		if Loaded then
+			return
+		end
+
+		Loaded = true
 		return LoadESP(), CreatingFunctions.Crosshair()
 	end
 })
@@ -1432,7 +1495,7 @@ end)
 
 --// Interactive User Functions
 
-Environment.UnwrapAll = function() -- (<void>) => <boolean> Success Status
+Environment.UnwrapPlayers = function() -- (<void>) => <boolean> Success Status
 	local UtilityAssets = Environment.UtilityAssets
 
 	local WrappedObjects = UtilityAssets.WrappedObjects
@@ -1449,10 +1512,10 @@ Environment.UnwrapAll = function() -- (<void>) => <boolean> Success Status
 	return #WrappedObjects == 0
 end
 
-Environment.RemoveAll = function(self) -- METHOD | (<void>) => <void>
-	assert(self, "EXUNYS_ESP.RemoveAll: Missing parameter #1 \"self\" <table>.")
+Environment.UnwrapAll = function(self) -- METHOD | (<void>) => <void>
+	assert(self, "EXUNYS_ESP.UnwrapAll: Missing parameter #1 \"self\" <table>.")
 
-	if self.UnwrapAll() and CrosshairParts.LeftLine then
+	if self.UnwrapPlayers() and CrosshairParts.LeftLine then
 		self.RemoveCrosshair()
 	end
 
@@ -1462,7 +1525,7 @@ end
 Environment.Restart = function(self) -- METHOD | (<void>) => <void>
 	assert(self, "EXUNYS_ESP.Restart: Missing parameter #1 \"self\" <table>.")
 
-	if self.UnwrapAll() then
+	if self.UnwrapPlayers() then
 		for _, Connection in next, self.UtilityAssets.ServiceConnections do
 			Disconnect(Connection)
 		end
@@ -1479,10 +1542,9 @@ end
 Environment.Exit = function(self) -- METHOD | (<void>) => <void>
 	assert(self, "EXUNYS_ESP.Exit: Missing parameter #1 \"self\" <table>.")
 
-	if self:RemoveAll() then
+	if self:UnwrapAll() then
 		for _, Connection in next, self.UtilityAssets.ServiceConnections do
-			Disconnect(Connection)
-			Connection = nil
+			pcall(Disconnect, Connection)
 		end
 
 		for _, RenderObject in next, CrosshairParts do
@@ -1497,13 +1559,19 @@ Environment.Exit = function(self) -- METHOD | (<void>) => <void>
 			Table = nil
 		end
 
-		LoadESP = nil; Recursive = nil
+		for Index, _ in next, Environment do
+			getgenv().ExunysDeveloperESP[Index] = nil
+		end
+
+		LoadESP = nil; Recursive = nil; Loaded = false
 
 		getgenv().ExunysDeveloperESP = nil
 	end
 end
 
-Environment.WrapObject = UtilityFunctions.WrapObject -- METHOD | (<Instance> Object[, <string> PseudoName, <table> Allowed Visuals]) => <string> Hash
+Environment.WrapObject = function(...) -- (<Instance> Object[, <string> PseudoName, <table> Allowed Visuals]) => <string> Hash
+	return UtilityFunctions:WrapObject(...)
+end
 
 Environment.UnwrapObject = UtilityFunctions.UnwrapObject -- (<Instance/string> Object/Hash[, <string> Hash]) => <void>
 
@@ -1531,7 +1599,11 @@ Environment.WrapPlayers = LoadESP -- (<void>) => <void>
 Environment.GetEntry = UtilityFunctions.GetObjectEntry -- (<Instance> Object[, <string> Hash]) => <table> Entry
 
 Environment.Load = function() -- (<void>) => <void>
-	LoadESP(); CreatingFunctions.Crosshair()
+	if Loaded then
+		return
+	end
+
+	LoadESP(); CreatingFunctions.Crosshair(); Loaded = true
 end
 
 Environment.UpdateConfiguration = function(DeveloperSettings, Settings, Properties) -- (<table> DeveloperSettings, <table> Settings, <table> Properties) => <table> New Environment
@@ -1553,7 +1625,7 @@ Environment.LoadConfiguration = function(self) -- METHOD | (<void>) => <void>
 
 	local Path = self.DeveloperSettings.Path
 
-	if self:RemoveAll() then
+	if self:UnwrapAll() then
 		pcall(function()
 			local Configuration, Data = ConfigLibrary:LoadConfig(Path), {}
 
