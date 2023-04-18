@@ -99,7 +99,6 @@ getgenv().ExunysDeveloperESP = {
 	DeveloperSettings = {
 		Path = "Exunys Developer/Exunys ESP/Configuration.cfg",
 		UnwrapOnCharacterAbsence = false,
-		UnwrapObjectOnParentNewIndex = false,
 		UpdateMode = "RenderStepped",
 		TeamCheckOption = "TeamColor",
 		RainbowSpeed = 1, -- Bigger = Slower
@@ -1315,7 +1314,6 @@ local UtilityFunctions = {
 			Hash = CoreFunctions.GenerateHash(0x100),
 
 			Object = Object,
-			OldParent = __index(Object, "Parent"),
 			Allowed = Allowed,
 			Name = PseudoName or __index(Object, "Name"),
 			DisplayName = PseudoName or __index(Object, (IsA(Object, "Player") and "Display" or "").."Name"),
@@ -1353,12 +1351,6 @@ local UtilityFunctions = {
 
 			Entry.Connections.UnwrapSignal = Connect(Entry.Object.Changed, function(Property)
 				if Property == "Parent" and not IsDescendantOf(__index(Entry.Object, Property), Workspace) then
-					self.UnwrapObject(nil, Entry.Hash)
-				end
-			end)
-
-			Entry.Connections.UnwrapOnParentChange = Connect(Entry.Object.Changed, function(Property)
-				if Property == "Parent" and __index(Entry.Object, Property) ~= Entry.OldParent and DeveloperSettings.UnwrapObjectOnParentNewIndex then
 					self.UnwrapObject(nil, Entry.Hash)
 				end
 			end)
