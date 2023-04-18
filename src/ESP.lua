@@ -1372,7 +1372,7 @@ local UtilityFunctions = {
 
 		WrappedObjects[#WrappedObjects + 1] = Entry
 
-		Entry.Connections.UnwrapSignal = Connect(Entry.Object.Changed, function(Property)
+		Entry.Connections.PlayerUnwrapSignal = Connect(Entry.Object.Changed, function(Property)
 			if DeveloperSettings.UnwrapOnCharacterAbsence and Property == "Parent" and not IsDescendantOf(__index(Entry.Object, (Entry.IsAPlayer and "Character" or Property)), Workspace) then
 				self.UnwrapObject(nil, Entry.Hash)
 			end
