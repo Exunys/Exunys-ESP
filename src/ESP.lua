@@ -1234,7 +1234,7 @@ local UtilityFunctions = {
 		local DeveloperSettings = Environment.DeveloperSettings
 
 		Entry.Connections.UpdateChecks = Connect(__index(RunService, DeveloperSettings.UpdateMode), function()
-			if not Entry.IsAPlayer and not Entry.PartHasCharacter and not Distance then
+			if not Entry.IsAPlayer and not Entry.PartHasCharacter then
 				Checks.Ready = (__index(Player, "Position") - __index(CurrentCamera, "Position")).Magnitude < Distance; return
 			end
 
