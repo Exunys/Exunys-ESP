@@ -1235,18 +1235,7 @@ local UtilityFunctions = {
 
 		Entry.Connections.UpdateChecks = Connect(__index(RunService, DeveloperSettings.UpdateMode), function()
 			if not Entry.IsAPlayer and not Entry.PartHasCharacter and not Distance then
-				local IsInDistance = select(2, pcall(function()
-					local LocalCharacter = __index(LocalPlayer, "Character")
-					local LocalCharacterPosition = __index(__index(LocalCharacter, "PrimaryPart"), "Position")
-
-					return LocalCharacter and (__index(Player, "Position") - LocalCharacterPosition).Magnitude < Distance or true
-				end))
-
-				IsInDistance = type(IsInDistance) == "boolean" and IsInDistance or false
-
-				Checks.Ready = IsInDistance
-
-				return
+				Checks.Ready = (__index(Player, "Position") - __index(CurrentCamera, "Position")).Magnitude < Distance; return
 			end
 
 			local PartHumanoid = FindFirstChildOfClass(__index(Player, "Parent"), "Humanoid")
