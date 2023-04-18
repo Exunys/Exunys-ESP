@@ -38,7 +38,7 @@ You can re-use / stitch this script or any system of this project into any of yo
 
 - [**v1.0b**] First (BETA) release </details> <details> <summary> 15/04/2023 </summary>
 - [**v1.0.3b**] Optimizations, bug fixes, silenced errors </details> <details> <summary> 18/04/2023 </summary>
-- [**v1.0.7b**] Optimizations & bug fixes </details>
+- [**v1.0.8b**] Optimizations & bug fixes, added distance parameter for wrapping </details>
 
 # 👋 Introduction
 
@@ -262,7 +262,7 @@ CrosshairProperties.CenterDot.Color = Color3.fromHex("#FFFFFF")
 ## Wrapping & unwrapping Parts / NPCs
 Wrapping objects:
 ```rust
-<string> Hash | ExunysDeveloperESP.WrapObject(<Instance> Object[, <string> Pseudo Name, <table> Allowed Visuals])
+<string> Hash | ExunysDeveloperESP.WrapObject(<Instance> Object[, <string> Pseudo Name, <table> Allowed Visuals, <uint> Distance])
 ```
 Unwrapping objects:
 ```rust
