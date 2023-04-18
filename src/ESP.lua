@@ -1216,14 +1216,18 @@ local CreatingFunctions = {
 }
 
 local UtilityFunctions = {
-	InitChecks = function(self, Entry)
+	InitChecks = function(self, Entry, Distance)
 		if not Entry.IsAPlayer and not Entry.PartHasCharacter then
 			return
 		end
 
+		Distance = Distance or Inf
+
 		local Player = Entry.Object
 		local Checks = Entry.Checks
 		local Hash = Entry.Hash
+
+		local IsAPlayer = Entry.IsAPlayer
 
 		local Settings = Environment.Settings
 
@@ -1232,7 +1236,7 @@ local UtilityFunctions = {
 		Entry.Connections.UpdateChecks = Connect(__index(RunService, DeveloperSettings.UpdateMode), function()
 			local PartHumanoid = FindFirstChildOfClass(__index(Player, "Parent"), "Humanoid")
 
-			if not Entry.IsAPlayer then
+			if not IsAPlayer then
 				Checks.Ready = Entry.PartHasCharacter and PartHumanoid and IsDescendantOf(Player, Workspace)
 
 				if not Checks.Ready then
@@ -1274,7 +1278,18 @@ local UtilityFunctions = {
 				end
 			end
 
-			Checks.Ready = Checks.Alive and Checks.Team and not Settings.PartsOnly
+			local IsInDistance = select(2, pcall(function()
+				local LocalCharacter = __index(LocalPlayer, "Character")
+				local LocalCharacterPosition = __index(__index(LocalCharacter, "PrimaryPart"), "Position")
+
+				local ObjectPosition = IsAPlayer and __index(Head, "Position") or __index(Player, "Position")
+
+				return LocalCharacter and (ObjectPosition - LocalCharacterPosition).Magnitude < Distance or true
+			end))
+
+			IsInDistance = type(IsInDistance) == "boolean" and IsInDistance or false
+
+			Checks.Ready = Checks.Alive and Checks.Team and not Settings.PartsOnly and IsInDistance
 
 			if Checks.Ready then
 				Entry.RigType = Humanoid and (__index(Humanoid, "RigType") == 0 and "R6" or "R15") or "N/A"
@@ -1290,7 +1305,7 @@ local UtilityFunctions = {
 		end
 	end,
 
-	WrapObject = function(self, Object, PseudoName, Allowed)
+	WrapObject = function(self, Object, PseudoName, Allowed, Distance)
 		assert(self, "EXUNYS_ESP > UtilityFunctions.WrapObject - Internal error, unassigned parameter \"self\".")
 
 		if pcall(gethiddenproperty, Object, "PrimaryPart") then
@@ -1368,7 +1383,7 @@ local UtilityFunctions = {
 		CreatingFunctions.HealthBar(Entry)
 		Entry.Visuals.Chams = CreatingFunctions.Chams(Entry)
 
-		self:InitChecks(Entry)
+		self:InitChecks(Entry, Distance)
 
 		WrappedObjects[#WrappedObjects + 1] = Entry
 
