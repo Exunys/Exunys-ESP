@@ -1217,7 +1217,7 @@ local CreatingFunctions = {
 
 local UtilityFunctions = {
 	InitChecks = function(self, Entry, Distance)
-		if not Entry.IsAPlayer and not Entry.PartHasCharacter then
+		if not Entry.IsAPlayer and not Entry.PartHasCharacter and not Distance then
 			return
 		end
 
@@ -1234,6 +1234,21 @@ local UtilityFunctions = {
 		local DeveloperSettings = Environment.DeveloperSettings
 
 		Entry.Connections.UpdateChecks = Connect(__index(RunService, DeveloperSettings.UpdateMode), function()
+			if not Entry.IsAPlayer and not Entry.PartHasCharacter and not Distance then
+				local IsInDistance = select(2, pcall(function()
+					local LocalCharacter = __index(LocalPlayer, "Character")
+					local LocalCharacterPosition = __index(__index(LocalCharacter, "PrimaryPart"), "Position")
+
+					return LocalCharacter and (__index(Player, "Position") - LocalCharacterPosition).Magnitude < Distance or true
+				end))
+
+				IsInDistance = type(IsInDistance) == "boolean" and IsInDistance or false
+
+				Checks.Ready = IsInDistance
+
+				return
+			end
+
 			local PartHumanoid = FindFirstChildOfClass(__index(Player, "Parent"), "Humanoid")
 
 			if not IsAPlayer then
@@ -1288,6 +1303,8 @@ local UtilityFunctions = {
 			end))
 
 			IsInDistance = type(IsInDistance) == "boolean" and IsInDistance or false
+
+			Checks.Ready = true
 
 			Checks.Ready = Checks.Alive and Checks.Team and not Settings.PartsOnly and IsInDistance
 
