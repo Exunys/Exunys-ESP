@@ -1235,7 +1235,7 @@ local UtilityFunctions = {
 
 		Entry.Connections.UpdateChecks = Connect(__index(RunService, DeveloperSettings.UpdateMode), function()
 			if not Entry.IsAPlayer and not Entry.PartHasCharacter then
-				Checks.Ready = (__index(Player, "Position") - __index(CurrentCamera, "Position")).Magnitude < Distance; return
+				Checks.Ready = (__index(Player, "Position") - __index(CurrentCamera, "CFrame").Position).Magnitude < Distance; return
 			end
 
 			local PartHumanoid = FindFirstChildOfClass(__index(Player, "Parent"), "Humanoid")
