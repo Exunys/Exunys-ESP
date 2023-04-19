@@ -283,6 +283,13 @@ local CoreFunctions = {
 		return Color3fromHSV(tick() % RainbowSpeed / RainbowSpeed, 1, 1)
 	end,
 
+	GetLocalCharacterPosition = function()
+		local LocalCharacter = __index(LocalPlayer, "Character")
+		local LocalPlayerCheckPart = LocalCharacter and (__index(LocalCharacter, "PrimaryPart") or FindFirstChild(LocalCharacter, "Head"))
+
+		return LocalPlayerCheckPart and __index(LocalPlayerCheckPart, "Position") or __index(CurrentCamera, "CFrame").Position
+	end,
+
 	GenerateHash = function(Bits)
 		local Result = ""
 
@@ -367,7 +374,7 @@ local UpdatingFunctions = {
 			local Content, Player, IsAPlayer = "", Entry.Object, Entry.IsAPlayer
 			local Name, DisplayName = Entry.Name, Entry.DisplayName
 
-			local Character, LocalCharacter = IsAPlayer and __index(Player, "Character") or Player, __index(LocalPlayer, "Character")
+			local Character = IsAPlayer and __index(Player, "Character") or Player
 			local Humanoid = FindFirstChildOfClass(Character, "Humanoid")
 			local Health, MaxHealth = Humanoid and __index(Humanoid, "Health") or Nan, Humanoid and __index(Humanoid, "MaxHealth") or Nan
 
@@ -379,10 +386,8 @@ local UpdatingFunctions = {
 			SetRenderProperty(TopTextObject, "Text", Content)
 
 			local PlayerPosition = __index((IsAPlayer and (__index(Character, "PrimaryPart") or __index(Character, "Head")) or Character), "Position") or Vector3zero
-			local LocalPlayerCheckPart = LocalCharacter and (__index(LocalCharacter, "PrimaryPart") or FindFirstChild(LocalCharacter, "Head"))
-			local LocalPlayerPosition = LocalPlayerCheckPart and __index(LocalPlayerCheckPart, "Position") or Vector3zero
 
-			local Distance = Settings.DisplayDistance and mathfloor((PlayerPosition - LocalPlayerPosition).Magnitude)
+			local Distance = Settings.DisplayDistance and mathfloor((PlayerPosition - CoreFunctions.GetLocalCharacterPosition()).Magnitude)
 
 			Content = Distance and stringformat("%s Studs", Distance) or ""
 
@@ -964,6 +969,8 @@ local CreatingFunctions = {
 		local Object = Entry.Object
 		local ChamsEntry = Entry.Visuals.Chams
 
+		local Cancel = false
+
 		if Entry.RigType == "R15" then
 			ChamsEntry = {
 				Head = {},
@@ -983,17 +990,15 @@ local CreatingFunctions = {
 				["Right Leg"] = {}
 			}
 		elseif not Entry.IsAPlayer then
-			local Cancel = false
-
 			xpcall(function()
 				ChamsEntry[__index(Object, "Name")] = {}
 			end, function()
 				Cancel = true
 			end)
+		end
 
-			if Cancel then
-				return
-			end
+		if not type(ChamsEntry) == "table" or not ChamsEntry or Cancel then
+			return
 		end
 
 		for _, Value in next, ChamsEntry do
@@ -1216,12 +1221,10 @@ local CreatingFunctions = {
 }
 
 local UtilityFunctions = {
-	InitChecks = function(self, Entry, Distance)
-		if not Entry.IsAPlayer and not Entry.PartHasCharacter and not Distance then
+	InitChecks = function(self, Entry)
+		if not Entry.IsAPlayer and not Entry.PartHasCharacter and not Entry.RenderDistance then
 			return
 		end
-
-		Distance = Distance or Inf
 
 		local Player = Entry.Object
 		local Checks = Entry.Checks
@@ -1234,8 +1237,10 @@ local UtilityFunctions = {
 		local DeveloperSettings = Environment.DeveloperSettings
 
 		Entry.Connections.UpdateChecks = Connect(__index(RunService, DeveloperSettings.UpdateMode), function()
+			local RenderDistance = Entry.RenderDistance
+
 			if not Entry.IsAPlayer and not Entry.PartHasCharacter then
-				Checks.Ready = (__index(Player, "Position") - __index(CurrentCamera, "CFrame").Position).Magnitude < Distance; return
+				Checks.Ready = (__index(Player, "Position") - CoreFunctions.GetLocalCharacterPosition()).Magnitude <= RenderDistance; return
 			end
 
 			local PartHumanoid = FindFirstChildOfClass(__index(Player, "Parent"), "Humanoid")
@@ -1283,12 +1288,7 @@ local UtilityFunctions = {
 			end
 
 			local IsInDistance = select(2, pcall(function()
-				local LocalCharacter = __index(LocalPlayer, "Character")
-				local LocalCharacterPosition = __index(__index(LocalCharacter, "PrimaryPart"), "Position")
-
-				local ObjectPosition = IsAPlayer and __index(Head, "Position") or __index(Player, "Position")
-
-				return LocalCharacter and (ObjectPosition - LocalCharacterPosition).Magnitude < Distance or true
+				return (IsAPlayer and __index(Head, "Position") or __index(Player, "Position") - CoreFunctions.GetLocalCharacterPosition()).Magnitude <= RenderDistance or true
 			end))
 
 			IsInDistance = type(IsInDistance) == "boolean" and IsInDistance or false
@@ -1304,14 +1304,16 @@ local UtilityFunctions = {
 	end,
 
 	GetObjectEntry = function(Object, Hash)
-		for _, Value in next, Environment.WrappedObjects do
-			if Value.Object == Object or Value.Hash == Hash then
+		Hash = type(Object) == "string" and Object or Hash
+
+		for _, Value in next, Environment.UtilityAssets.WrappedObjects do
+			if Hash and Value.Hash == Hash or Value.Object == Object then
 				return Value
 			end
 		end
 	end,
 
-	WrapObject = function(self, Object, PseudoName, Allowed, Distance)
+	WrapObject = function(self, Object, PseudoName, Allowed, RenderDistance)
 		assert(self, "EXUNYS_ESP > UtilityFunctions.WrapObject - Internal error, unassigned parameter \"self\".")
 
 		if pcall(gethiddenproperty, Object, "PrimaryPart") then
@@ -1338,12 +1340,11 @@ local UtilityFunctions = {
 			Allowed = Allowed,
 			Name = PseudoName or __index(Object, "Name"),
 			DisplayName = PseudoName or __index(Object, (IsA(Object, "Player") and "Display" or "").."Name"),
+			RenderDistance = RenderDistance or Inf,
 
 			IsAPlayer = IsA(Object, "Player"),
 			PartHasCharacter = false,
 			RigType = "N/A",
-
-			Connections = {},
 
 			Checks = {
 				Alive = true,
@@ -1357,7 +1358,9 @@ local UtilityFunctions = {
 				Box = {},
 				HealthBar = {},
 				HeadDot = {}
-			}
+			},
+
+			Connections = {}
 		}
 
 		repeat wait(0) until Entry.IsAPlayer and FindFirstChildOfClass(__index(Entry.Object, "Character"), "Humanoid") or true
@@ -1389,9 +1392,9 @@ local UtilityFunctions = {
 		CreatingFunctions.HealthBar(Entry)
 		Entry.Visuals.Chams = CreatingFunctions.Chams(Entry)
 
-		self:InitChecks(Entry, Distance)
+		self:InitChecks(Entry)
 
-		WrappedObjects[#WrappedObjects + 1] = Entry
+		WrappedObjects[Entry.Hash] = Entry
 
 		Entry.Connections.PlayerUnwrapSignal = Connect(Entry.Object.Changed, function(Property)
 			if DeveloperSettings.UnwrapOnCharacterAbsence and Property == "Parent" and not IsDescendantOf(__index(Entry.Object, (Entry.IsAPlayer and "Character" or Property)), Workspace) then
@@ -1406,27 +1409,20 @@ local UtilityFunctions = {
 		Hash = type(Object) == "string" and Object
 		Object = type(Object) == "string" and nil
 
-		local Entry, Index
-
-		for _Index, Value in next, Environment.UtilityAssets.WrappedObjects do
+		for _, Value in next, Environment.UtilityAssets.WrappedObjects do
 			if Value.Object == Object or Value.Hash == Hash then
-				Entry, Index = Value, _Index
-				break
-			end
-		end
-
-		if Entry then
-			for _, Value in next, Entry.Connections do
-				Disconnect(Value)
-			end
-
-			Recursive(Entry.Visuals, function(_, Value)
-				if type(Value) == "table" and Value.__OBJECT then
-					pcall(Value.Remove, Value)
+				for _, _Value in next, Value.Connections do
+					pcall(Disconnect, _Value)
 				end
-			end)
 
-			Environment.UtilityAssets.WrappedObjects[Index] = nil
+				Recursive(Value.Visuals, function(_, _Value)
+					if type(_Value) == "table" and _Value.__OBJECT then
+						pcall(_Value.Remove, _Value)
+					end
+				end)
+
+				Environment.UtilityAssets.WrappedObjects[Hash] = nil; break
+			end
 		end
 	end
 }
@@ -1545,17 +1541,23 @@ end
 Environment.Restart = function(self) -- METHOD | (<void>) => <void>
 	assert(self, "EXUNYS_ESP.Restart: Missing parameter #1 \"self\" <table>.")
 
-	if self.UnwrapPlayers() then
-		for _, Connection in next, self.UtilityAssets.ServiceConnections do
-			Disconnect(Connection)
-		end
+	local Objects = {}
 
-		if CrosshairParts.LeftLine then
-			self.RemoveCrosshair()
-			self.RenderCrosshair()
-		end
+	for _, Value in next, self.UtilityAssets.WrappedObjects do
+		Objects[#Objects + 1] = {Value.Hash, Value.Object, Value.Name, Value.Allowed, Value.RenderDistance}
+	end
 
-		LoadESP()
+	for _, Value in next, Objects do
+		self.UnwrapObject(Value[1])
+	end
+
+	for _, Value in next, Objects do
+		self.WrapObject(select(2, unpack(Value)))
+	end
+
+	if CrosshairParts.LeftLine then
+		self.RemoveCrosshair()
+		self.RenderCrosshair()
 	end
 end
 
@@ -1589,7 +1591,7 @@ Environment.Exit = function(self) -- METHOD | (<void>) => <void>
 	end
 end
 
-Environment.WrapObject = function(...) -- (<Instance> Object[, <string> PseudoName, <table> Allowed Visuals]) => <string> Hash
+Environment.WrapObject = function(...) -- (<Instance> Object[, <string> Pseudo Name, <table> Allowed Visuals, <uint> Render Distance]) => <string> Hash
 	return UtilityFunctions:WrapObject(...)
 end
 
