@@ -38,7 +38,13 @@ You can re-use / stitch this script or any system of this project into any of yo
 
 - [**v1.0b**] First (BETA) release </details> <details> <summary> 15/04/2023 </summary>
 - [**v1.0.3b**] Optimizations, bug fixes, silenced errors </details> <details> <summary> 18/04/2023 </summary>
-- [**v1.0.8b**] Optimizations & bug fixes, added distance parameter for wrapping </details>
+- [**v1.0.8b**] Optimizations & bug fixes, added distance parameter for wrapping </details> <details> <summary> 19/04/2023 </summary>
+- [**v1.1.1b**] Optimizations, bug fixes, improved `Restart` interactive method, added new core function for getting the local users's positions and more... </details> 
+
+# 📋 Documentation
+
+### The documentation for the interactive functions of this module can be found by clicking [here](https://exunys.gitbook.io/exunys-esp-documentation/) or at the following link:
+### https://exunys.gitbook.io/exunys-esp-documentation/
 
 # 👋 Introduction
 
@@ -256,8 +262,6 @@ CrosshairProperties.CenterDot.Color = Color3.fromHex("#FFFFFF")
 ```
 
 </details>
-
-# Documentation is a WIP. More information soon.
 
 ## Wrapping & unwrapping Parts / NPCs
 Wrapping objects:
