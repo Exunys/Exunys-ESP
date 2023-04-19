@@ -46,6 +46,8 @@ You can re-use / stitch this script or any system of this project into any of yo
 ### The documentation for the interactive functions of this module can be found by clicking [here](https://exunys.gitbook.io/exunys-esp-documentation/) or at the following link:
 ### https://exunys.gitbook.io/exunys-esp-documentation/
 
+More detailed information for this project will be documented by time in this README.md document.
+
 # 👋 Introduction
 
 First of all, to implement the module in your script's environment you must use the function `loadstring` like below:
