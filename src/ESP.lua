@@ -68,22 +68,20 @@ local IsDescendantOf = function(self, ...)
 	return typeof(self) == "Instance" and self.IsDescendantOf(self, ...)
 end
 
-local TemporaryDrawing, CrosshairParts = Drawingnew("Line"), {}
-local GetRenderProperty = getupvalue(getmetatable(TemporaryDrawing).__index, 4)
-local SetRenderProperty = getupvalue(getmetatable(TemporaryDrawing).__newindex, 4)
-
-local Connect, Disconnect = __index(game, "DescendantAdded").Connect
+local Connect, Disconnect, GetRenderProperty, SetRenderProperty = __index(game, "DescendantAdded").Connect
 
 do
+	local TemporaryDrawing = Drawingnew("Line")
+	GetRenderProperty = getupvalue(getmetatable(TemporaryDrawing).__index, 4)
+	SetRenderProperty = getupvalue(getmetatable(TemporaryDrawing).__newindex, 4)
+	TemporaryDrawing.Remove(TemporaryDrawing)
+
 	local TemporaryConnection = Connect(__index(game, "DescendantAdded"), function() end)
 	Disconnect = TemporaryConnection.Disconnect
 	Disconnect(TemporaryConnection)
-	TemporaryConnection = nil
 end
 
-TemporaryDrawing.Remove(TemporaryDrawing)
-
-local Inf, Nan, Loaded = 1 / 0, 0 / 0, false
+local Inf, Nan, Loaded, CrosshairParts = 1 / 0, 0 / 0, false, {}
 
 --// Checking for multiple processes
 
