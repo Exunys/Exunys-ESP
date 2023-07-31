@@ -1291,8 +1291,6 @@ local UtilityFunctions = {
 
 			IsInDistance = type(IsInDistance) == "boolean" and IsInDistance or false
 
-			Checks.Ready = true
-
 			Checks.Ready = Checks.Alive and Checks.Team and not Settings.PartsOnly and IsInDistance
 
 			if Checks.Ready then
