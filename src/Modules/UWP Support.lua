@@ -110,6 +110,8 @@ getgenv().ExunysDeveloperESP = {
 		TeamCheck = false,
 		AliveCheck = true,
 		LoadConfigOnLaunch = true,
+        EnableTeamColors = false,
+        TeamColor = Color3fromRGB(170, 170, 255)
 	},
 
 	Properties = {
@@ -331,7 +333,13 @@ local CoreFunctions = {
 		local BoxPosition = Vector2new(mathfloor(TopX / 2 + BottomX / 2 - BoxSize.X / 2), mathfloor(mathmin(TopY, BottomY)))
 
 		return BoxPosition, BoxSize, (TopOnScreen and BottomOnScreen)
-	end
+	end,
+
+    GetColor = function(Player, DefaultColor)
+        local Settings, TeamCheckOption = Environment.Settings, Environment.DeveloperSettings.TeamCheckOption
+
+        return Settings.EnableTeamColors and __index(Player, TeamCheckOption) == __index(LocalPlayer, TeamCheckOption) and Settings.TeamColor or DefaultColor
+    end
 }
 
 local UpdatingFunctions = {
@@ -357,9 +365,11 @@ local UpdatingFunctions = {
 				SetRenderProperty(BottomTextObject, Index, Value)
 			end
 
-			SetRenderProperty(TopTextObject, "Color", Settings.RainbowColor and CoreFunctions.GetRainbowColor() or Settings.Color)
+            local GetColor = CoreFunctions.GetColor
+
+			SetRenderProperty(TopTextObject, "Color", GetColor(Entry.Object, Settings.RainbowColor and CoreFunctions.GetRainbowColor() or Settings.Color))
 			SetRenderProperty(TopTextObject, "OutlineColor", Settings.RainbowOutlineColor and CoreFunctions.GetRainbowColor() or Settings.OutlineColor)
-			SetRenderProperty(BottomTextObject, "Color", Settings.RainbowColor and CoreFunctions.GetRainbowColor() or Settings.Color)
+			SetRenderProperty(BottomTextObject, "Color", GetColor(Entry.Object, Settings.RainbowColor and CoreFunctions.GetRainbowColor() or Settings.Color))
 			SetRenderProperty(BottomTextObject, "OutlineColor", Settings.RainbowOutlineColor and CoreFunctions.GetRainbowColor() or Settings.OutlineColor)
 
 			local Offset = mathclamp(Settings.Offset, 10, 30)
@@ -394,7 +404,7 @@ local UpdatingFunctions = {
 		end
 	end,
 
-	Tracer = function(Entry, TracerObject,  TracerOutlineObject)
+	Tracer = function(Entry, TracerObject, TracerOutlineObject)
 		local Settings = Environment.Properties.Tracer
 
 		local Position, Size, OnScreen = CoreFunctions.CalculateParameters(Entry)
@@ -415,7 +425,7 @@ local UpdatingFunctions = {
 				SetRenderProperty(TracerObject, Index, Value)
 			end
 
-			SetRenderProperty(TracerObject, "Color", Settings.RainbowColor and CoreFunctions.GetRainbowColor() or Settings.Color)
+			SetRenderProperty(TracerObject, "Color", CoreFunctions.GetColor(Entry.Object, Settings.RainbowColor and CoreFunctions.GetRainbowColor() or Settings.Color))
 
 			local CameraViewportSize = __index(CurrentCamera, "ViewportSize")
 
@@ -479,7 +489,7 @@ local UpdatingFunctions = {
 				end
 			end
 
-			SetRenderProperty(CircleObject, "Color", Settings.RainbowColor and CoreFunctions.GetRainbowColor() or Settings.Color)
+			SetRenderProperty(CircleObject, "Color", CoreFunctions.GetColor(Entry.Object, Settings.RainbowColor and CoreFunctions.GetRainbowColor() or Settings.Color))
 
 			SetRenderProperty(CircleObject, "Position", CoreFunctions.ConvertVector(Vector))
 			SetRenderProperty(CircleObject, "Radius", mathabs((Top - Bottom).Y) - 3)
@@ -520,7 +530,7 @@ local UpdatingFunctions = {
 				SetRenderProperty(BoxObject, Index, Value)
 			end
 
-			SetRenderProperty(BoxObject, "Color", Settings.RainbowColor and CoreFunctions.GetRainbowColor() or Settings.Color)
+			SetRenderProperty(BoxObject, "Color", CoreFunctions.GetColor(Entry.Object, Settings.RainbowColor and CoreFunctions.GetRainbowColor() or Settings.Color))
 
 			if Settings.Outline then
 				SetRenderProperty(BoxOutlineObject, "Position", Position)
@@ -646,7 +656,7 @@ local UpdatingFunctions = {
 			if Index == "Enabled" then
 				Index, Value = "Visible", ChamsEnabled and ESPEnabled and IsReady
 			elseif Index == "Color" then
-				Value = Settings.RainbowColor and CoreFunctions.GetRainbowColor() or Settings.Color
+				Value = CoreFunctions.GetColor(Entry.Object, Settings.RainbowColor and CoreFunctions.GetRainbowColor() or Settings.Color)
 			end
 
 			if not pcall(GetRenderProperty, Quads.Quad1Object, Index) then
