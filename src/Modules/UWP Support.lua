@@ -365,7 +365,7 @@ local UpdatingFunctions = {
 				SetRenderProperty(BottomTextObject, Index, Value)
 			end
 
-		 local GetColor = CoreFunctions.GetColor
+			local GetColor = CoreFunctions.GetColor
 
 			SetRenderProperty(TopTextObject, "Color", GetColor(Entry.Object, Settings.RainbowColor and CoreFunctions.GetRainbowColor() or Settings.Color))
 			SetRenderProperty(TopTextObject, "OutlineColor", Settings.RainbowOutlineColor and CoreFunctions.GetRainbowColor() or Settings.OutlineColor)
