@@ -35,7 +35,7 @@ local RunService = GetService(game, "RunService")
 local UserInputService = GetService(game, "UserInputService")
 
 local CurrentCamera = __index(Workspace, "CurrentCamera")
-local LocalPlayer =  __index(Players, "LocalPlayer")
+local LocalPlayer = __index(Players, "LocalPlayer")
 
 local FindFirstChildOfClass = function(self, ...)
 	return typeof(self) == "Instance" and self.FindFirstChildOfClass(self, ...)
@@ -110,8 +110,8 @@ getgenv().ExunysDeveloperESP = {
 		TeamCheck = false,
 		AliveCheck = true,
 		LoadConfigOnLaunch = true,
-        EnableTeamColors = false,
-        TeamColor = Color3fromRGB(170, 170, 255)
+		EnableTeamColors = false,
+		TeamColor = Color3fromRGB(170, 170, 255)
 	},
 
 	Properties = {
@@ -335,11 +335,11 @@ local CoreFunctions = {
 		return BoxPosition, BoxSize, (TopOnScreen and BottomOnScreen)
 	end,
 
-    GetColor = function(Player, DefaultColor)
-        local Settings, TeamCheckOption = Environment.Settings, Environment.DeveloperSettings.TeamCheckOption
+	GetColor = function(Player, DefaultColor)
+		local Settings, TeamCheckOption = Environment.Settings, Environment.DeveloperSettings.TeamCheckOption
 
-        return Settings.EnableTeamColors and __index(Player, TeamCheckOption) == __index(LocalPlayer, TeamCheckOption) and Settings.TeamColor or DefaultColor
-    end
+		return Settings.EnableTeamColors and __index(Player, TeamCheckOption) == __index(LocalPlayer, TeamCheckOption) and Settings.TeamColor or DefaultColor
+	end
 }
 
 local UpdatingFunctions = {
@@ -365,7 +365,7 @@ local UpdatingFunctions = {
 				SetRenderProperty(BottomTextObject, Index, Value)
 			end
 
-            local GetColor = CoreFunctions.GetColor
+		 local GetColor = CoreFunctions.GetColor
 
 			SetRenderProperty(TopTextObject, "Color", GetColor(Entry.Object, Settings.RainbowColor and CoreFunctions.GetRainbowColor() or Settings.Color))
 			SetRenderProperty(TopTextObject, "OutlineColor", Settings.RainbowOutlineColor and CoreFunctions.GetRainbowColor() or Settings.OutlineColor)
@@ -673,8 +673,8 @@ local UpdatingFunctions = {
 			--// Quad 1 - Front
 
 			{
-				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X,  PartSize.Y, PartSize.Z).Position), -- Top Left
-				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X,  PartSize.Y, PartSize.Z).Position), -- Top Right
+				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, PartSize.Y, PartSize.Z).Position), -- Top Left
+				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, PartSize.Y, PartSize.Z).Position), -- Top Right
 				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, -PartSize.Y, PartSize.Z).Position), -- Bottom Left
 				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, -PartSize.Y, PartSize.Z).Position) -- Bottom Right
 			},
@@ -683,8 +683,8 @@ local UpdatingFunctions = {
 			--// Quad 2 - Back
 
 			{
-				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X,  PartSize.Y, -PartSize.Z).Position), -- Top Left
-				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X,  PartSize.Y, -PartSize.Z).Position), -- Top Right
+				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, PartSize.Y, -PartSize.Z).Position), -- Top Left
+				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, PartSize.Y, -PartSize.Z).Position), -- Top Right
 				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, -PartSize.Y, -PartSize.Z).Position), -- Bottom Left
 				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, -PartSize.Y, -PartSize.Z).Position) -- Bottom Right
 			},
@@ -692,7 +692,7 @@ local UpdatingFunctions = {
 			--// Quad 3 - Top
 
 			{
-				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X,  PartSize.Y, PartSize.Z).Position), -- Top Left
+				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, PartSize.Y, PartSize.Z).Position), -- Top Left
 				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, PartSize.Y, PartSize.Z).Position), -- Top Right
 				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, PartSize.Y, -PartSize.Z).Position), -- Bottom Left
 				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, PartSize.Y, -PartSize.Z).Position) -- Bottom Right
@@ -701,7 +701,7 @@ local UpdatingFunctions = {
 			--// Quad 4 - Bottom
 
 			{
-				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X,  -PartSize.Y, PartSize.Z).Position), -- Top Left
+				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, -PartSize.Y, PartSize.Z).Position), -- Top Left
 				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, -PartSize.Y, PartSize.Z).Position), -- Top Right
 				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, -PartSize.Y, -PartSize.Z).Position), -- Bottom Left
 				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, -PartSize.Y, -PartSize.Z).Position) -- Bottom Right
@@ -710,7 +710,7 @@ local UpdatingFunctions = {
 			--// Quad 5 - Right
 
 			{
-				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X,  PartSize.Y, PartSize.Z).Position), -- Top Left
+				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, PartSize.Y, PartSize.Z).Position), -- Top Left
 				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, PartSize.Y, -PartSize.Z).Position), -- Top Right
 				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, -PartSize.Y, PartSize.Z).Position), -- Bottom Left
 				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, -PartSize.Y, -PartSize.Z).Position) -- Bottom Right
@@ -719,7 +719,7 @@ local UpdatingFunctions = {
 			--// Quad 6 - Left
 
 			{
-				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X,  PartSize.Y, PartSize.Z).Position), -- Top Left
+				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, PartSize.Y, PartSize.Z).Position), -- Top Left
 				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, PartSize.Y, -PartSize.Z).Position), -- Top Right
 				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, -PartSize.Y, PartSize.Z).Position), -- Bottom Left
 				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, -PartSize.Y, -PartSize.Z).Position) -- Bottom Right
