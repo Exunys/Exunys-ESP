@@ -13,7 +13,7 @@ local mathfloor, mathabs, mathcos, mathsin, mathrad, mathdeg, mathmin, mathmax, 
 local stringformat, stringfind, stringchar = string.format, string.find, string.char
 local unpack = table.unpack
 local wait, spawn = task.wait, task.spawn
-local getgenv, getrawmetatable, getupvalue, gethiddenproperty = getgenv, getrawmetatable, debug.getupvalue, gethiddenproperty
+local getgenv, getrawmetatable, gethiddenproperty = getgenv, getrawmetatable, gethiddenproperty
 
 local ConfigLibrary = loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/Exunys/Config-Library/main/Main.lua"))()
 
