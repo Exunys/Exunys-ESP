@@ -1678,3 +1678,5 @@ Environment.SaveConfiguration = function(self) -- METHOD | (<void>) => <void>
 		Properties = self.Properties
 	})
 end
+
+return Environment
