@@ -53,7 +53,7 @@ More detailed information for this project will be documented by time in this RE
 
 First of all, to implement the module in your script's environment you must use the function `loadstring` like below:
 ```lua
-local ESPLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Exunys-ESP/main/src/ESP.lua"))() -- Returns the environment
+local ESPLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Exunys-ESP/main/src/ESP.lua"))()
 -- ESPLibrary and ExunysDeveloperESP is equivalent
 ```
 The code above loads the module's environment in your script executor's global environment meaning it will be archivable across every script.
@@ -63,6 +63,10 @@ The identificator for the environment is `ExunysDeveloperESP` which is a table t
 The table loaded into the exploit's global environment by the module has a [*metatable*](https://create.roblox.com/docs/scripting/luau/metatables) set to it with a **__call** metamethod, meaning you can call the table which would wrap every player in the game and render a crosshair.
 ```lua
 ExunysDeveloperESP()
+```
+or
+```lua
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Exunys-ESP/main/src/ESP.lua"))()()
 ```
 This is equivalent to the `Load` function (which would be more optimized and faster).
 ```lua
