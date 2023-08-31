@@ -13,7 +13,11 @@ else
 		if select(2, pcall(select(2, pcall(loadstring, game:HttpGet("https://raw.githubusercontent.com/Exunys/Exunys-ESP/main/src/Modules/UWP%20Support.lua"))))) then
 			warn("EXUNYS_ESP > Loader - Your script execution software does not support this module.")
 			ExunysDeveloperESP:Exit()
+		else
+			return loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Exunys-ESP/main/src/Modules/UWP%20Support.lua"))()
 		end
+	else
+		return loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Exunys-ESP/main/src/Modules/Original.lua"))()
 	end
 end
 
