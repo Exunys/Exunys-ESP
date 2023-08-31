@@ -109,8 +109,8 @@ getgenv().ExunysDeveloperESP = {
 		TeamCheck = false,
 		AliveCheck = true,
 		LoadConfigOnLaunch = true,
-        EnableTeamColors = false,
-        TeamColor = Color3fromRGB(170, 170, 255)
+		EnableTeamColors = false,
+		TeamColor = Color3fromRGB(170, 170, 255)
 	},
 
 	Properties = {
