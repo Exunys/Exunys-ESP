@@ -444,6 +444,7 @@ local UpdatingFunctions = {
 			if Settings.Outline then
 				SetRenderProperty(TracerOutlineObject, "Color", Settings.RainbowOutlineColor and CoreFunctions.GetRainbowColor() or Settings.OutlineColor)
 				SetRenderProperty(TracerOutlineObject, "Thickness", Settings.Thickness + 1)
+				SetRenderProperty(TracerOutlineObject, "Transparency", Settings.Transparency)
 
 				SetRenderProperty(TracerOutlineObject, "From", GetRenderProperty(TracerObject, "From"))
 				SetRenderProperty(TracerOutlineObject, "To", GetRenderProperty(TracerObject, "To"))
