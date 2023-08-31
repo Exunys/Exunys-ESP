@@ -8,7 +8,7 @@
 --// Caching
 
 local game = game
-local assert, loadstring, select, next, type, typeof, pcall, xpcall, setmetatable, getmetatable, tick, warn = assert, loadstring, select, next, type, typeof, pcall, xpcall, setmetatable, getmetatable, tick, warn
+local assert, loadstring, select, next, type, typeof, pcall, xpcall, setmetatable, tick, warn = assert, loadstring, select, next, type, typeof, pcall, xpcall, setmetatable, tick, warn
 local mathfloor, mathabs, mathcos, mathsin, mathrad, mathdeg, mathmin, mathmax, mathclamp, mathrandom = math.floor, math.abs, math.cos, math.sin, math.rad, math.deg, math.min, math.max, math.clamp, math.random
 local stringformat, stringfind, stringchar = string.format, string.find, string.char
 local unpack = table.unpack
