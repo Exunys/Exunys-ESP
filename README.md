@@ -298,7 +298,7 @@ for Index, Value in next, workspace.Landmines:GetChildren() do
 		continue 
 	end
     
-	local Hash = ExunysDeveloperESP.WrapObject(Part, "Landmine "..Index, {Tracer = false})
+	local Hash = ExunysDeveloperESP:WrapObject(Part, "Landmine "..Index, {Tracer = false})
 
 	task.delay(3, function()
 		ExunysDeveloperESP.UnwrapObject(Hash)
