@@ -315,7 +315,7 @@ These 2 functions also apply to players & NPCs (anything with a character).
 <details> <summary> Code example </summary>
 
 ```lua
-ExunysDeveloperESP.WrapObject(workspace.Dummys.Dummy, "Dumb Dummy")
+ExunysDeveloperESP:WrapObject(workspace.Dummys.Dummy, "Dumb Dummy")
 
 -- The object parsed in the first parameter is a model that has a R15 character rig and a humanoid (which it must contain)
 ```
