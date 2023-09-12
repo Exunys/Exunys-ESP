@@ -276,7 +276,7 @@ CrosshairProperties.CenterDot.Color = Color3.fromHex("#FFFFFF")
 ## Wrapping & unwrapping Parts / NPCs
 Wrapping objects:
 ```rust
-<string> Hash | ExunysDeveloperESP.WrapObject(<Instance> Object[, <string> Pseudo Name, <table> Allowed Visuals, <uint> Distance])
+<string> Hash | ExunysDeveloperESP:WrapObject(<Instance> Object[, <string> Pseudo Name, <table> Allowed Visuals, <uint> Distance])
 ```
 Unwrapping objects:
 ```rust
