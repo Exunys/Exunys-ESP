@@ -8,6 +8,8 @@ This project is in beta testing, feel free to create pull requests (you will get
 
 This project has been inspired from [AirHub](https://github.com/Exunys/AirHub) which has an improved version of my [old examplery discontinued wall hack script](https://github.com/Exunys/Wall-Hack). It has a CS:GO-styled look which looks beautiful for fps games.
 
+This project is used in the new [AirHub V2](https://github.com/Exunys/AirHub-V2) where you can use and edit the configuration through a GUI (it also includes a really fast Aimbot).
+
 ### ❗ Notice
 This project has been written and tested with and only with [Synapse X](https://x.synapse.to) however, I will attempt my best to modulize support for every exploit. So far, the required functions for this module to run will be listed below:
 
