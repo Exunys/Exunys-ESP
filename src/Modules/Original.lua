@@ -85,10 +85,8 @@ local Inf, Nan, Loaded, CrosshairParts = 1 / 0, 0 / 0, false, {}
 
 --// Checking for multiple processes
 
-do
-	if ExunysDeveloperESP then
-		ExunysDeveloperESP:Exit()
-	end
+if ExunysDeveloperESP then
+	ExunysDeveloperESP:Exit()
 end
 
 --// Settings
