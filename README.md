@@ -63,9 +63,7 @@ The identificator for the environment is `ExunysDeveloperESP` which is a table t
 The table loaded into the exploit's global environment by the module has a [*metatable*](https://create.roblox.com/docs/scripting/luau/metatables) set to it with a **__call** metamethod, meaning you can call the table which would wrap every player in the game and render a crosshair.
 ```lua
 ExunysDeveloperESP()
-```
-or
-```lua
+-- or
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Exunys-ESP/main/src/ESP.lua"))()()
 ```
 This is equivalent to the `Load` function (which would be more optimized and faster).
