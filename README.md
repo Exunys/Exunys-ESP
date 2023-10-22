@@ -317,7 +317,7 @@ These 2 functions also apply to players & NPCs (anything with a character).
 ```lua
 ExunysDeveloperESP:WrapObject(workspace.Dummys.Dummy, "Dumb Dummy")
 
--- The object parsed in the first parameter is a model that has a R15 character rig and a humanoid (which it must contain)
+-- The object parsed in the first parameter is a model that has an R15 character rig and a humanoid (which is a dependance)
 ```
 
 https://user-images.githubusercontent.com/76539058/232631988-18d8a058-db4a-4d24-b7e1-ff7909ef527e.mp4
