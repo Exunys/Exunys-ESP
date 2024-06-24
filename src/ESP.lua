@@ -13,7 +13,9 @@ if not Success then
 
         Success, ESP = pcall(select(2, pcall(loadstring, game:HttpGet("https://raw.githubusercontent.com/Exunys/Exunys-ESP/main/src/Modules/Primitive.lua")))) -- Degraded for UWP & free / weaker exploits (works on web version)
 
-        return warn("EXUNYS_ESP > Loader - Your script execution software does not support this module.")
+        if not Success then
+            return warn("EXUNYS_ESP > Loader - Your script execution software does not support this module.")
+        end
     end
 end
 
