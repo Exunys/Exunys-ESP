@@ -155,7 +155,7 @@ getgenv().ExunysDeveloperESP = {
 			Color = Color3fromRGB(255, 255, 255),
 			Transparency = 1,
 			Size = 14,
-			Font = DrawingFonts.System, -- UI, System, Plex, Monospace
+			Font = DrawingFonts.Plex, -- UI, System, Plex, Monospace
 
 			OutlineColor = Color3fromRGB(0, 0, 0),
 			Outline = true,
