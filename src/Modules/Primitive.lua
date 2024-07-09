@@ -153,7 +153,7 @@ getgenv().ExunysDeveloperESP = {
 
 	Properties = {
 		ESP = {
-			Enabled = not Solara, -- Please read: 
+			Enabled = not Solara, -- Please read: https://github.com/Exunys/Exunys-ESP/blob/main/README.md#-message-to-solara-users
 			RainbowColor = false,
 			RainbowOutlineColor = false,
 			Offset = 10,
