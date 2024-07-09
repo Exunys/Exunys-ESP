@@ -115,12 +115,18 @@ end, function(self)
 	return self:Disconnect()
 end
 
-local Inf, Nan, Loaded, CrosshairParts = 1 / 0, 0 / 0, false, {}
+local Inf, Nan, Loaded, CrosshairParts, Solara = 1 / 0, 0 / 0, false, {}, false
 
 --// Checking for multiple processes
 
 if ExunysDeveloperESP then
 	ExunysDeveloperESP:Exit()
+end
+
+--// Checking if the exploit used is Solara
+
+if FindFirstChild(GetService("CoreGui"), "Drawing") then
+	warn("EXUNYS_ESP > Primitive.lua - Solara detected. The ESP visual will be laggy and decrease performance, turning it off is recommended!"); Solara = true
 end
 
 --// Settings
@@ -147,7 +153,7 @@ getgenv().ExunysDeveloperESP = {
 
 	Properties = {
 		ESP = {
-			Enabled = true,
+			Enabled = not Solara, -- Please read: 
 			RainbowColor = false,
 			RainbowOutlineColor = false,
 			Offset = 10,
@@ -155,7 +161,7 @@ getgenv().ExunysDeveloperESP = {
 			Color = Color3fromRGB(255, 255, 255),
 			Transparency = 1,
 			Size = 14,
-			Font = DrawingFonts.Plex, -- UI, System, Plex, Monospace
+			Font = DrawingFonts.Plex, -- Roboto, Legacy, SourceSans, RobotoMono
 
 			OutlineColor = Color3fromRGB(0, 0, 0),
 			Outline = true,
@@ -408,8 +414,12 @@ local UpdatingFunctions = {
 			local PositionX, PositionY = Position.X, Position.Y
 			local SizeX, SizeY = Size.X, Size.Y
 
-			SetRenderProperty(TopTextObject, "Position", Vector2new(PositionX + (SizeX / 2), PositionY - Offset * 2))
-			SetRenderProperty(BottomTextObject, "Position", Vector2new(PositionX + (SizeX / 2), PositionY + SizeY + Offset / 2))
+            do -- This is the part that lags. The least I can do to optimize this module on Solara
+				local LabelsXPosition = PositionX + (SizeX / 2)
+
+				TopTextObject.Position = Vector2new(LabelsXPosition, PositionY - Offset * 2)
+				BottomTextObject.Position = Vector2new(LabelsXPosition, PositionY + SizeY + Offset / 2)
+			end
 
 			local Content, Player, IsAPlayer = "", Entry.Object, Entry.IsAPlayer
 			local Name, DisplayName = Entry.Name, Entry.DisplayName
@@ -1710,5 +1720,7 @@ Environment.SaveConfiguration = function(self) -- METHOD | (<void>) => <void>
 		Properties = self.Properties
 	})
 end
+
+Environment()
 
 return Environment
