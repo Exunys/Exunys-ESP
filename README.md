@@ -48,7 +48,7 @@ You can re-use / stitch this script or any system of this project into any of yo
 
 If you are using Solara, please be aware that Solara uses the [Roblox GUI objects as drawing elements](https://github.com/quivings/Solara/blob/main/Storage/Drawing.lua) instead of Direct2D, meaning you are **unsafe**.
 
-This also comes with performance detriments that does not match the pre-set standards and expectations as with other previous exploits.
+This also comes with performance detriments that do not match the pre-set standards and expectations as with other previous exploits.
 
 Sadly enough an important parameter to remember is that for this module to execute at all it goes through 2 stages of degrading (removing the optimizations that aren't supported by Solara).
 
