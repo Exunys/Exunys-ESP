@@ -44,6 +44,33 @@ You can re-use / stitch this script or any system of this project into any of yo
 - [**v1.1.1b**] Optimizations, bug fixes, improved `Restart` interactive method, added new core function for getting the local users's positions and more... </details> <details> <summary> 31/08/2023 </summary>
 - [**v1.1.3b**] Added a variable that changes the teammates' visuals' color to differ from the enemies (team color) and made the script return the environment </details>
 
+## ❗ Message to Solara users 
+
+If you are using Solara, please be aware that Solara uses the [Roblox GUI objects as drawing elements](https://github.com/quivings/Solara/blob/main/Storage/Drawing.lua) instead of Direct2D, meaning you are **unsafe**.
+
+This also comes with performance detriments that does not match the pre-set standards and expectations as with other previous exploits.
+
+Sadly enough an important parameter to remember is that for this module to execute at all it goes through 2 stages of degrading (removing the optimizations that aren't supported by Solara).
+
+The best version "Original.lua" is of course actually the best in performance results.
+
+### To any user arguing: 
+
+> To this vulnerability I will answer simply to every person with poor judgement saying that the ESP is laggy / bad / terrible or whatever argument they have coming their way, that it is not my fault rather the Solara development team's.
+
+A solution to this mess is to toggle off the ESP visual for the module to work smoothly.
+
+```lua
+ExunysDeveloperESP.Properties.ESP = false
+```
+
+<details> <summary> Photos </summary>
+
+![image](https://github.com/Exunys/Exunys-ESP/assets/76539058/f864f4d4-6e09-4bd4-a966-d45f279bed50)
+![image](https://github.com/Exunys/Exunys-ESP/assets/76539058/d3594651-2ceb-482a-9a31-4eccba9c1744)
+
+</details>
+
 # 📋 Documentation
 
 ### The documentation for the interactive functions of this module can be found by clicking [here](https://exunys.gitbook.io/exunys-esp-documentation/) or at the following link:
