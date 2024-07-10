@@ -414,7 +414,7 @@ local UpdatingFunctions = {
 			local PositionX, PositionY = Position.X, Position.Y
 			local SizeX, SizeY = Size.X, Size.Y
 
-            do -- This is the part that lags. The least I can do to optimize this module on Solara
+			do -- This is the part that lags. The least I can do to optimize this module on Solara
 				local LabelsXPosition = PositionX + (SizeX / 2)
 
 				TopTextObject.Position = Vector2new(LabelsXPosition, PositionY - Offset * 2)
@@ -1720,7 +1720,5 @@ Environment.SaveConfiguration = function(self) -- METHOD | (<void>) => <void>
 		Properties = self.Properties
 	})
 end
-
-Environment()
 
 return Environment
