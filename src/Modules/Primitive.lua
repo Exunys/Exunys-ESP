@@ -125,7 +125,7 @@ end
 
 --// Checking if the exploit used is Solara
 
-if FindFirstChild(GetService("CoreGui"), "Drawing") then
+if FindFirstChild(GetService(game, "CoreGui"), "Drawing") then
 	warn("EXUNYS_ESP > Primitive.lua - Solara detected. The ESP visual will be laggy and decrease performance, turning it off is recommended!"); Solara = true
 end
 
