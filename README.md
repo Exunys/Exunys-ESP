@@ -38,38 +38,27 @@ You can re-use / stitch this script or any system of this project into any of yo
 
 <details> <summary> 14/04/2023 </summary>
 
-- [**v1.0b**] First (BETA) release </details> <details> <summary> 15/04/2023 </summary>
-- [**v1.0.3b**] Optimizations, bug fixes, silenced errors </details> <details> <summary> 18/04/2023 </summary>
-- [**v1.0.8b**] Optimizations & bug fixes, added distance parameter for wrapping </details> <details> <summary> 19/04/2023 </summary>
-- [**v1.1.1b**] Optimizations, bug fixes, improved `Restart` interactive method, added new core function for getting the local users's positions and more... </details> <details> <summary> 31/08/2023 </summary>
-- [**v1.1.3b**] Added a variable that changes the teammates' visuals' color to differ from the enemies (team color) and made the script return the environment </details>
+- [**v1.0b**] First (BETA) release
 
-## ❗ Message to Solara users 
+</details> <details> <summary> 15/04/2023 </summary>
 
-If you are using Solara, please be aware that Solara uses the [Roblox GUI objects as drawing elements](https://github.com/quivings/Solara/blob/main/Storage/Drawing.lua) instead of Direct2D, meaning you are **unsafe**.
+- [**v1.0.3b**] Optimizations, bug fixes, silenced errors
 
-This also comes with performance detriments that do not match the pre-set standards and expectations as with other previous exploits.
+</details> <details> <summary> 18/04/2023 </summary>
 
-Sadly enough an important parameter to remember is that for this module to execute at all it goes through 2 stages of degrading (removing the optimizations that aren't supported by Solara).
+- [**v1.0.8b**] Optimizations & bug fixes, added distance parameter for wrapping
 
-The best version "Original.lua" is of course actually the best in performance results.
+</details> <details> <summary> 19/04/2023 </summary>
 
-### To any user arguing: 
+- [**v1.1.1b**] Optimizations, bug fixes, improved `Restart` interactive method, added new core function for getting the local users's positions and more...
 
-> To this vulnerability I will answer simply to every person with poor judgement saying that the ESP is laggy / bad / terrible or whatever argument they have coming their way, that it is not my fault rather the Solara development team's.
+</details> <details> <summary> 31/08/2023 </summary>
 
-A solution to this mess is to toggle off the ESP visual for the module to work smoothly.
+- [**v1.1.3b**] Added a variable that changes the teammates' visuals' color to differ from the enemies (team color) and made the script return the environment
 
-```lua
-ExunysDeveloperESP.Properties.ESP = false
-```
+</details> <details> <summary> 18/08/2024 </summary>
 
-<details> <summary> Photos </summary>
-
-![image](https://github.com/Exunys/Exunys-ESP/assets/76539058/f864f4d4-6e09-4bd4-a966-d45f279bed50)
-![image](https://github.com/Exunys/Exunys-ESP/assets/76539058/d3594651-2ceb-482a-9a31-4eccba9c1744)
-
-</details>
+- [**v1.1.4b**] Packed the module to a singular file with support for any executor and more... </details>
 
 # 📋 Documentation
 
