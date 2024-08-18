@@ -11,7 +11,7 @@ This project has been inspired from [AirHub](https://github.com/Exunys/AirHub) w
 This project is used in the new [AirHub V2](https://github.com/Exunys/AirHub-V2) where you can use and edit the configuration through a GUI (it also includes a really fast Aimbot).
 
 ### ❗ Notice
-This project has been written and tested with and only with [Synapse X](https://x.synapse.to) however, I will attempt my best to modulize support for every exploit. So far, the required functions for this module to run will be listed below:
+This project has been written and tested with Synapse X and Electron. However, I will do my best to modularize support for every exploit. So far, the required functions for this module to run are listed below:
 
 <details> <summary> Dependencies (required functions & libraries): </summary>
 
@@ -33,8 +33,8 @@ This project has been written and tested with and only with [Synapse X](https://
 This project also uses [Exunys' Config Library](https://github.com/Exunys/Config-Library) as a way of storing user settings, meaning, your script executor must support the dependencies for the module if you want the *configuration storing & loading functions* in the ESP module to function.
 
 ### 📜 License
-This project is completely free and open sourced. But, that does not mean you own rights to it. Read this [document](https://github.com/Exunys/Exunys-ESP/blob/main/LICENSE) for more information.
-You can re-use / stitch this script or any system of this project into any of your repositories, as long as you credit the developer [Exunys](https://github.com/Exunys).
+This project is completely free and open source. However, that does not mean you own the rights to it. Please read this [document](https://github.com/Exunys/Exunys-ESP/blob/main/LICENSE) for more information.
+You can reuse or integrate this script or any system from this project into your own repositories, as long as you credit the developer, [Exunys](https://github.com/Exunys) (me).
 
 ## 📑 Update log (DD/MM/YYYY): 
 
