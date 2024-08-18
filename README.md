@@ -6,7 +6,7 @@ This project's source is optimized, organized and simplified to the maximal leve
 
 This project is in beta testing, feel free to create pull requests (you will get credited), issues or just contact me on any of my linked platforms.
 
-This project has been inspired from [AirHub](https://github.com/Exunys/AirHub) which has an improved version of my [old examplery discontinued wall hack script](https://github.com/Exunys/Wall-Hack). It has a CS:GO-styled look which looks beautiful for fps games.
+This project has been inspired from [AirHub](https://github.com/Exunys/AirHub) which has an improved version of my [old examplery discontinued wall hack script](https://github.com/Exunys/Wall-Hack). It has a FPS-styled look which looks beautiful for any game.
 
 This project is used in the new [AirHub V2](https://github.com/Exunys/AirHub-V2) where you can use and edit the configuration through a GUI (it also includes a really fast Aimbot).
 
@@ -26,6 +26,8 @@ This project has been written and tested with and only with [Synapse X](https://
     - **getgenv**
     - **getrawmetatable**
     - **gethiddenproperty**
+    - **cloneref**
+    - **clonefunction**
 </details>
 
 This project also uses [Exunys' Config Library](https://github.com/Exunys/Config-Library) as a way of storing user settings, meaning, your script executor must support the dependencies for the module if you want the *configuration storing & loading functions* in the ESP module to function.
