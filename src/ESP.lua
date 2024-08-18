@@ -92,7 +92,7 @@ local Degrade = (function()
 				local __index_render = getupvalue(getmetatable(TemporaryDrawing).__index, 4)
 
 				if __index_render and __index_render(TemporaryDrawing, "Thickness") == 1 then
-					return false -- The exploit fully supports the optimizations for the module.
+					return false -- No degrading, meaning the exploit fully supports the optimizations for the module.
 				end
 			end
 		end
