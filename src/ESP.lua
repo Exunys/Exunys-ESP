@@ -252,7 +252,7 @@ getgenv().ExunysDeveloperESP = {
 		},
 
 		Chams = {
-			Enabled = true, -- Keep disabled, broken, WIP...
+			Enabled = false, -- Keep disabled, broken, WIP...
 			RainbowColor = false,
 
 			Color = Color3fromRGB(255, 255, 255),
