@@ -1377,7 +1377,9 @@ local UtilityFunctions = {
 					Checks.Alive = __index(PartHumanoid, "Health") > 0
 				end
 
-				Checks.Ready = Checks.Ready and Checks.Alive and ((__index(PartHumanoid and __index(Player, "PrimaryPart"), "Position") - CoreFunctions.GetLocalCharacterPosition()).Magnitude <= RenderDistance)
+				local IsInDistance = (__index(PartHumanoid and __index(Player, "PrimaryPart"), "Position") - CoreFunctions.GetLocalCharacterPosition()).Magnitude <= RenderDistance
+					
+				Checks.Ready = Checks.Ready and Checks.Alive and IsInDistance
 
 				return
 			end
@@ -1408,7 +1410,9 @@ local UtilityFunctions = {
 				end
 			end
 
-			Checks.Ready = Checks.Alive and Checks.Team and not Settings.PartsOnly and ((IsAPlayer and __index(Head, "Position") or __index(Player, "Position") - CoreFunctions.GetLocalCharacterPosition()).Magnitude <= RenderDistance)
+			local IsInDistance = (IsAPlayer and __index(Head, "Position") - CoreFunctions.GetLocalCharacterPosition()).Magnitude <= RenderDistance
+
+			Checks.Ready = Checks.Alive and Checks.Team and not Settings.PartsOnly and IsInDistance
 
 			if Checks.Ready then
 				Entry.RigType = Humanoid and (__index(Humanoid, "RigType") == 0 and "R6" or "R15") or "N/A" -- Deprecated method (might be faulty sometimes)
