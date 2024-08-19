@@ -1360,13 +1360,13 @@ local UtilityFunctions = {
 		Entry.Connections.UpdateChecks = Connect(__index(RunService, DeveloperSettings.UpdateMode), function()
 			local RenderDistance = Entry.RenderDistance
 
-			if not Entry.IsAPlayer and not Entry.PartHasCharacter then
+			if not IsAPlayer and not Entry.PartHasCharacter then -- Part
 				Checks.Ready = (__index(Player, "Position") - CoreFunctions.GetLocalCharacterPosition()).Magnitude <= RenderDistance; return
 			end
 
 			local PartHumanoid = FindFirstChildOfClass(__index(Player, "Parent"), "Humanoid")
 
-			if not IsAPlayer then
+			if not IsAPlayer then -- NPC
 				Checks.Ready = Entry.PartHasCharacter and PartHumanoid and IsDescendantOf(Player, Workspace)
 
 				if not Checks.Ready then
@@ -1377,7 +1377,7 @@ local UtilityFunctions = {
 					Checks.Alive = __index(PartHumanoid, "Health") > 0
 				end
 
-				Checks.Ready = Checks.Ready and Checks.Alive
+				Checks.Ready = Checks.Ready and Checks.Alive and ((__index(PartHumanoid and __index(Player, "PrimaryPart"), "Position") - CoreFunctions.GetLocalCharacterPosition()).Magnitude <= RenderDistance)
 
 				return
 			end
@@ -1386,7 +1386,7 @@ local UtilityFunctions = {
 			local Humanoid = Character and FindFirstChildOfClass(Character, "Humanoid")
 			local Head = Character and FindFirstChild(Character, "Head")
 
-			if Character and IsDescendantOf(Character, Workspace) and Humanoid and Head then
+			if Character and IsDescendantOf(Character, Workspace) and Humanoid and Head then -- Player
 				local TeamCheckOption = DeveloperSettings.TeamCheckOption
 
 				Checks.Alive = true
@@ -1408,13 +1408,7 @@ local UtilityFunctions = {
 				end
 			end
 
-			local IsInDistance = select(2, pcall(function()
-				return (IsAPlayer and __index(Head, "Position") or __index(Player, "Position") - CoreFunctions.GetLocalCharacterPosition()).Magnitude <= RenderDistance or true
-			end))
-
-			IsInDistance = type(IsInDistance) == "boolean" and IsInDistance or false
-
-			Checks.Ready = Checks.Alive and Checks.Team and not Settings.PartsOnly and IsInDistance
+			Checks.Ready = Checks.Alive and Checks.Team and not Settings.PartsOnly and ((IsAPlayer and __index(Head, "Position") or __index(Player, "Position") - CoreFunctions.GetLocalCharacterPosition()).Magnitude <= RenderDistance)
 
 			if Checks.Ready then
 				Entry.RigType = Humanoid and (__index(Humanoid, "RigType") == 0 and "R6" or "R15") or "N/A" -- Deprecated method (might be faulty sometimes)
