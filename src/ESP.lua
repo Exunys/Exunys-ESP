@@ -1296,6 +1296,12 @@ local CreatingFunctions = {
 							SetRenderProperty(Value, "To", To)
 						end
 					end
+				else
+					for _, Index in next, {"LeftLine", "RightLine", "TopLine", "BottomLine"} do
+						local Value = RenderObjects["Outline"..Index]
+
+						SetRenderProperty(Value, "Visible", false)
+					end
 				end
 
 				--// Center Dot
@@ -1304,6 +1310,7 @@ local CreatingFunctions = {
 				local CenterDotSettings = Settings.CenterDot
 
 				SetRenderProperty(CenterDot, "Visible", Settings.Enabled and CenterDotSettings.Enabled)
+				SetRenderProperty(RenderObjects.OutlineCenterDot, "Visible", Settings.Enabled and CenterDotSettings.Enabled and CenterDotSettings.Outline)
 
 				if GetRenderProperty(CenterDot, "Visible") then
 					for Index, Value in next, CenterDotSettings do
@@ -1323,7 +1330,6 @@ local CreatingFunctions = {
 					end
 
 					SetRenderProperty(CenterDot, "Position", Axis)
-					SetRenderProperty(RenderObjects.OutlineCenterDot, "Visible", CenterDotSettings.Outline)
 
 					if CenterDotSettings.Outline then
 						SetRenderProperty(RenderObjects.OutlineCenterDot, "Thickness", GetRenderProperty(CenterDot, "Thickness") + 1)
