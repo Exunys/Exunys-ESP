@@ -1337,8 +1337,8 @@ local CreatingFunctions = {
 					end
 				end
 			else
-				for _, RenderObject in next, CrosshairParts do
-					SetRenderProperty(RenderObject.__OBJECT, "Visible", false)
+				for _, RenderObject in next, RenderObjects do
+					SetRenderProperty(RenderObject, "Visible", false)
 				end
 			end
 		end)
