@@ -1298,9 +1298,7 @@ local CreatingFunctions = {
 					end
 				else
 					for _, Index in next, {"LeftLine", "RightLine", "TopLine", "BottomLine"} do
-						local Value = RenderObjects["Outline"..Index]
-
-						SetRenderProperty(Value, "Visible", false)
+						SetRenderProperty(RenderObjects["Outline"..Index], "Visible", false)
 					end
 				end
 
