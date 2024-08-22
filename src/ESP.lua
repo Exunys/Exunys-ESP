@@ -392,10 +392,9 @@ local CoreFunctions = {
 		local RigType = IsPlayer and FindFirstChild(__index(Part, "Parent"), "Torso") and "R6" or "R15"
 
 		local CameraUpVector = __index(CurrentCamera, "CFrame").UpVector
-		CameraUpVector = Vector3.new(CameraUpVector.X, CameraUpVector.Y * 0.75, CameraUpVector.Y)
 
-		local Top, TopOnScreen = Workspace.CurrentCamera:WorldToViewportPoint(PartPosition + (PartUpVector * (RigType == "R6" and 0.5 or 1.8)) + CameraUpVector)
-		local Bottom, BottomOnScreen = Workspace.CurrentCamera:WorldToViewportPoint(PartPosition - (PartUpVector * (RigType == "R6" and 4 or 2.5)) - CameraUpVector)
+		local Top, TopOnScreen = WorldToViewportPoint(PartPosition + (PartUpVector * (RigType == "R6" and 0.5 or 1.8)) + CameraUpVector)
+		local Bottom, BottomOnScreen = WorldToViewportPoint(PartPosition - (PartUpVector * (RigType == "R6" and 4 or 2.5)) - CameraUpVector)
 
 		local TopX, TopY = Top.X, Top.Y
 		local BottomX, BottomY = Bottom.X, Bottom.Y
@@ -1432,7 +1431,8 @@ local UtilityFunctions = {
 			Checks.Ready = Checks.Alive and Checks.Team and not Settings.PartsOnly and IsInDistance
 
 			if Checks.Ready then
-				Entry.RigType = Humanoid and (__index(Humanoid, "RigType") == 0 and "R6" or "R15") or "N/A" -- Deprecated method (might be faulty sometimes)
+				Entry.RigType = Humanoid and FindFirstChild(__index(Part, "Parent"), "Torso") and "R6" or "R15"
+				Entry.RigType = Entry.RigType == "N/A" and Humanoid and (__index(Humanoid, "RigType") == 0 and "R6" or "R15") or "N/A" -- Deprecated method (might be faulty sometimes)
 				Entry.RigType = Entry.RigType == "N/A" and Humanoid and (__index(Humanoid, "RigType") == Enum.HumanoidRigType.R6 and "R6" or "R15") or "N/A" -- Secondary check
 			end
 		end)
