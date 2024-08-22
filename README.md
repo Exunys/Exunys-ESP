@@ -62,6 +62,10 @@ You can reuse or integrate this script or any system from this project into your
 
 - [**v1.1.4b**] Packed the module to a singular file with support for any executor and more... </details>
 
+</details> <details> <summary> 22/08/2024 </summary>
+
+- [**v1.1.5b**] Added screen resolution stretching </details>
+
 # 📋 Documentation
 
 ### The documentation for the interactive functions of this module can be found by clicking [here](https://exunys.gitbook.io/exunys-esp-documentation/) or at the following link:
