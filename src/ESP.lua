@@ -139,7 +139,7 @@ else
 	GetRenderProperty, SetRenderProperty = __index, getmetatable(TemporaryDrawing).__newindex -- Must use the "__OBJECT" element for either of these functions.
 	TemporaryDrawing.Remove(TemporaryDrawing)
 
-	warn("EXUNYS_ESP > Your exploit does not support this module's optimizations! The ESP visual will be laggy and decrease performance, keeping it off (as a temporary solution) is recommended!")
+	warn("EXUNYS_ESP > Your exploit does not support this module's optimizations! The visuals might be laggy and decrease performance.")
 end
 
 --// Variables
@@ -171,12 +171,14 @@ getgenv().ExunysDeveloperESP = {
 		AliveCheck = true,
 		LoadConfigOnLaunch = true,
 		EnableTeamColors = false,
-		TeamColor = Color3fromRGB(170, 170, 255)
+		TeamColor = Color3fromRGB(170, 170, 255),
+		StretchScreenResoultion = false,
+		StretchAmount = 0.75
 	},
 
 	Properties = {
 		ESP = {
-			Enabled = not FindFirstChild(GetService("CoreGui"), "Drawing"), -- Temporary / optional fix for exploits with laggy "Text" drawing elements.
+			Enabled = true,
 			RainbowColor = false,
 			RainbowOutlineColor = false,
 			Offset = 10,
@@ -184,7 +186,7 @@ getgenv().ExunysDeveloperESP = {
 			Color = Color3fromRGB(255, 255, 255),
 			Transparency = 1,
 			Size = 14,
-			Font = DrawingFonts.System, -- UI, System, Plex, Monospace
+			Font = DrawingFonts.Plex, -- UI, System, Plex, Monospace
 
 			OutlineColor = Color3fromRGB(0, 0, 0),
 			Outline = true,
@@ -361,6 +363,14 @@ local CoreFunctions = {
 		return Result
 	end,
 
+	SetStretch = function()
+		local Settings = Environment.Settings
+
+		if Settings.StretchScreenResoultion then
+			CurrentCamera.CFrame *= CFramenew(0, 0, 0, 1, 0, 0, 0, Settings.StretchAmount, 0, 0, 0, 1)
+		end
+	end,
+
 	CalculateParameters = function(Object)
 		Object = type(Object) == "table" and Object.Object or Object
 
@@ -382,9 +392,10 @@ local CoreFunctions = {
 		local RigType = IsPlayer and FindFirstChild(__index(Part, "Parent"), "Torso") and "R6" or "R15"
 
 		local CameraUpVector = __index(CurrentCamera, "CFrame").UpVector
+		CameraUpVector = Vector3.new(CameraUpVector.X, CameraUpVector.Y * 0.75, CameraUpVector.Y)
 
-		local Top, TopOnScreen = WorldToViewportPoint(PartPosition + (PartUpVector * (RigType == "R6" and 0.5 or 1.8)) + CameraUpVector)
-		local Bottom, BottomOnScreen = WorldToViewportPoint(PartPosition - (PartUpVector * (RigType == "R6" and 4 or 2.5)) - CameraUpVector)
+		local Top, TopOnScreen = Workspace.CurrentCamera:WorldToViewportPoint(PartPosition + (PartUpVector * (RigType == "R6" and 0.5 or 1.8)) + CameraUpVector)
+		local Bottom, BottomOnScreen = Workspace.CurrentCamera:WorldToViewportPoint(PartPosition - (PartUpVector * (RigType == "R6" and 4 or 2.5)) - CameraUpVector)
 
 		local TopX, TopY = Top.X, Top.Y
 		local BottomX, BottomY = Bottom.X, Bottom.Y
@@ -1392,6 +1403,8 @@ local UtilityFunctions = {
 			local Humanoid = Character and FindFirstChildOfClass(Character, "Humanoid")
 			local Head = Character and FindFirstChild(Character, "Head")
 
+			local IsInDistance
+
 			if Character and IsDescendantOf(Character, Workspace) and Humanoid and Head then -- Player
 				local TeamCheckOption = DeveloperSettings.TeamCheckOption
 
@@ -1405,6 +1418,8 @@ local UtilityFunctions = {
 				if Settings.TeamCheck then
 					Checks.Team = __index(Player, TeamCheckOption) ~= __index(LocalPlayer, TeamCheckOption)
 				end
+
+				IsInDistance = (__index(Head, "Position") - CoreFunctions.GetLocalCharacterPosition()).Magnitude <= RenderDistance
 			else
 				Checks.Alive = false
 				Checks.Team = false
@@ -1413,8 +1428,6 @@ local UtilityFunctions = {
 					self.UnwrapObject(Hash)
 				end
 			end
-
-			local IsInDistance = (IsAPlayer and __index(Head, "Position") - CoreFunctions.GetLocalCharacterPosition()).Magnitude <= RenderDistance
 
 			Checks.Ready = Checks.Alive and Checks.Team and not Settings.PartsOnly and IsInDistance
 
@@ -1610,7 +1623,12 @@ local LoadESP = function()
 				end
 			end)
 		end
+
+
+		Disconnect(ServiceConnections.SetStretch); ServiceConnections.SetStretch = Connect(__index(RunService, Environment.DeveloperSettings.UpdateMode), CoreFunctions.SetStretch)
 	end)
+
+	Disconnect(ServiceConnections.SetStretch); ServiceConnections.SetStretch = Connect(__index(RunService, Environment.DeveloperSettings.UpdateMode), CoreFunctions.SetStretch)
 end
 
 setmetatable(Environment, {
@@ -1794,5 +1812,7 @@ Environment.SaveConfiguration = function(self) -- METHOD | (<void>) => <void>
 		Properties = self.Properties
 	})
 end
+
+Environment.UtilityAssets.ServiceConnections.SetStretch = Connect(__index(RunService, Environment.DeveloperSettings.UpdateMode), CoreFunctions.SetStretch)
 
 return Environment
