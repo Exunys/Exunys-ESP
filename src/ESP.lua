@@ -1700,6 +1700,8 @@ Environment.Restart = function(self) -- METHOD | (<void>) => <void>
 		self.RemoveCrosshair()
 		self.RenderCrosshair()
 	end
+
+	Environment.UtilityAssets.ServiceConnections.SetStretch = Connect(__index(RunService, Environment.DeveloperSettings.UpdateMode), CoreFunctions.SetStretch)
 end
 
 Environment.Exit = function(self) -- METHOD | (<void>) => <void>
