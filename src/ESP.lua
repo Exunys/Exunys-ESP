@@ -1692,16 +1692,18 @@ Environment.Restart = function(self) -- METHOD | (<void>) => <void>
 		self.UnwrapObject(Value[1])
 	end
 
-	for _, Value in next, Objects do
+	for Index, Value in next, Objects do
 		self.WrapObject(select(2, unpack(Value)))
+
+		if Index == #Objects then
+			Environment.UtilityAssets.ServiceConnections.SetStretch = Connect(__index(RunService, Environment.DeveloperSettings.UpdateMode), CoreFunctions.SetStretch)
+		end
 	end
 
 	if CrosshairParts.LeftLine then
 		self.RemoveCrosshair()
 		self.RenderCrosshair()
 	end
-
-	Environment.UtilityAssets.ServiceConnections.SetStretch = Connect(__index(RunService, Environment.DeveloperSettings.UpdateMode), CoreFunctions.SetStretch)
 end
 
 Environment.Exit = function(self) -- METHOD | (<void>) => <void>
