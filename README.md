@@ -117,7 +117,9 @@ getgenv().ExunysDeveloperESP = {
 		AliveCheck = true,
 		LoadConfigOnLaunch = true,
 		EnableTeamColors = false,
-		TeamColor = Color3.fromRGB(170, 170, 255)
+		TeamColor = Color3.fromRGB(170, 170, 255),
+		StretchScreenResoultion = false,
+		StretchAmount = 0.75
 	},
 
 	Properties = {
@@ -130,7 +132,7 @@ getgenv().ExunysDeveloperESP = {
 			Color = Color3.fromRGB(255, 255, 255),
 			Transparency = 1,
 			Size = 14,
-			Font = DrawingFonts.System, -- UI, System, Plex, Monospace
+			Font = DrawingFonts.Plex, -- Direct2D Fonts: {UI, System, Plex, Monospace}; ROBLOX Fonts: {Roboto, Legacy, SourceSans, RobotoMono}
 
 			OutlineColor = Color3.fromRGB(0, 0, 0),
 			Outline = true,
@@ -295,7 +297,7 @@ CrosshairProperties.CenterDot.Color = Color3.fromHex("#FFFFFF")
 
 </details>
 
-## Wrapping & unwrapping Parts / NPCs
+## Wrapping & unwrapping objects (Players / Parts / NPCs)
 Wrapping objects:
 ```rust
 <string> Hash | ExunysDeveloperESP:WrapObject(<Instance> Object[, <string> Pseudo Name, <table> Allowed Visuals, <uint> Distance])
