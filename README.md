@@ -1,6 +1,6 @@
 # 🌌 Exunys ESP [![Visitors](https://visitor-badge.laobi.icu/badge?page_id=Exunys.Exunys-ESP)](https://exunys.gitbook.io/exunys-esp-documentation)
 
-This project represents a collection of visuals / wall hacks (Tracers, ESP, Boxes, Head Dots, Chams & Crosshair). This script is also undetected because it uses [Synapse X's Drawing Library](https://docs.synapse.to/docs/reference/drawing_lib.html). It has modulized support for NPCs & parts and it offers a very simple and easy to use wrapping and unwrapping system.
+This project represents a collection of visuals / wall hacks (Tracers, ESP, Boxes, Head Dots & Crosshair). This script is also undetected because it uses [Synapse X's Drawing Library](https://docs.synapse.to/docs/reference/drawing_lib.html). It has modulized support for NPCs & parts and it offers a very simple and easy to use wrapping and unwrapping system.
 
 This project's source is optimized, organized and simplified to the maximal level to be executive, fast, stable and precise.
 
@@ -9,6 +9,10 @@ This project is in beta testing, feel free to create pull requests (you will get
 This project has been inspired from [AirHub](https://github.com/Exunys/AirHub) which has an improved version of my [old examplery discontinued wall hack script](https://github.com/Exunys/Wall-Hack). It has a FPS-styled look which looks beautiful for any game.
 
 This project is used in the new [AirHub V2](https://github.com/Exunys/AirHub-V2) where you can use and edit the configuration through a GUI (it also includes a really fast Aimbot).
+
+The **chams** element from this module has been shelved. If you want to use an even more premium version of this module (sadly you cannot integrate it, made specifically for exploiting) refer to Exunys's most recent project, [X-Ro](https://x-ro.cc) which also features more optimizations, working chams, skeleton ESP and highlights.
+
+![image](https://github.com/user-attachments/assets/157ff74f-3af0-4d86-8a5e-11139532973c)
 
 ### ❗ Notice
 This project has been written and tested with Synapse X and Electron. However, I will do my best to modularize support for every exploit. So far, the required functions for this module to run are listed below:
@@ -65,6 +69,10 @@ You can reuse or integrate this script or any system from this project into your
 </details> <details> <summary> 22/08/2024 </summary>
 
 - [**v1.1.5b**] Added screen resolution stretching </details>
+
+</details> <details> <summary> 29/08/2024 </summary>
+
+- [**v1.1.6b**] Shelved chams & bug fixes </details>
 
 # 📋 Documentation
 
@@ -199,16 +207,6 @@ getgenv().ExunysDeveloperESP = {
 
 			OutlineColor = Color3.fromRGB(0, 0, 0),
 			Outline = true
-		},
-
-		Chams = {
-			Enabled = false, -- Keep disabled, broken, WIP...
-			RainbowColor = false,
-
-			Color = Color3.fromRGB(255, 255, 255),
-			Transparency = 0.2,
-			Thickness = 1,
-			Filled = true
 		},
 
 		Crosshair = {
