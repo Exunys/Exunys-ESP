@@ -19,8 +19,6 @@ end, clonefunction or function(...)
 	return ...
 end
 
-loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/Exunys/Custom-Quad-Render-Object/main/Main.lua"))() -- Custom Quad Drawing Object
-
 local ConfigLibrary = loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/Exunys/Config-Library/main/Main.lua"))()
 
 local Vector2new, Vector3zero, CFramenew = Vector2.new, Vector3.zero, CFrame.new
@@ -255,16 +253,6 @@ getgenv().ExunysDeveloperESP = {
 			Outline = true
 		},
 
-		Chams = {
-			Enabled = false, -- Keep disabled, broken, WIP...
-			RainbowColor = false,
-
-			Color = Color3fromRGB(255, 255, 255),
-			Transparency = 0.2,
-			Thickness = 1,
-			Filled = true
-		},
-
 		Crosshair = {
 			Enabled = true,
 			RainbowColor = false,
@@ -371,16 +359,16 @@ local CoreFunctions = {
 		end
 	end,
 
-	CalculateParameters = function(Object)
+CalculateParameters = function(Object)
 		Object = type(Object) == "table" and Object.Object or Object
 
 		local DeveloperSettings = Environment.DeveloperSettings
 		local WidthBoundary = DeveloperSettings.WidthBoundary
 
-		local IsPlayer = IsA(Object, "Player")
+		local IsAPlayer = IsA(Object, "Player")
 
-		local Part = IsPlayer and (FindFirstChild(Players, __index(Object, "Name")) and __index(Object, "Character"))
-		Part = IsPlayer and (Part and (__index(Part, "PrimaryPart") or FindFirstChild(Part, "HumanoidRootPart"))) or Object
+		local Part = IsAPlayer and (FindFirstChild(Players, __index(Object, "Name")) and __index(Object, "Character"))
+		Part = IsAPlayer and Part and (__index(Part, "PrimaryPart") or FindFirstChild(Part, "HumanoidRootPart")) or Object
 
 		if not Part or IsA(Part, "Player") then
 			return nil, nil, false
@@ -389,7 +377,7 @@ local CoreFunctions = {
 		local PartCFrame, PartPosition, PartUpVector = __index(Part, "CFrame"), __index(Part, "Position")
 		PartUpVector = PartCFrame.UpVector
 
-		local RigType = IsPlayer and FindFirstChild(__index(Part, "Parent"), "Torso") and "R6" or "R15"
+		local RigType = FindFirstChild(__index(Part, "Parent"), "Torso") and "R6" or "R15"
 
 		local CameraUpVector = __index(CurrentCamera, "CFrame").UpVector
 
@@ -401,7 +389,7 @@ local CoreFunctions = {
 
 		local Width = mathmax(mathfloor(mathabs(TopX - BottomX)), 3)
 		local Height = mathmax(mathfloor(mathmax(mathabs(BottomY - TopY), Width / 2)), 3)
-		local BoxSize = Vector2new(mathfloor(mathmax(Height / (IsPlayer and WidthBoundary or 1), Width)), Height)
+		local BoxSize = Vector2new(mathfloor(mathmax(Height / (IsAPlayer and WidthBoundary or 1), Width)), Height)
 		local BoxPosition = Vector2new(mathfloor(TopX / 2 + BottomX / 2 - BoxSize.X / 2), mathfloor(mathmin(TopY, BottomY)))
 
 		return BoxPosition, BoxSize, (TopOnScreen and BottomOnScreen)
@@ -415,7 +403,7 @@ local CoreFunctions = {
 }
 
 local UpdatingFunctions = {
-	ESP = function(Entry, TopTextObject, BottomTextObject) -- TODO: Optimize, really laggy for some exploits that use ROBLOX's GUI Objects as a Drawing library instead of Direct2D.
+	ESP = function(Entry, TopTextObject, BottomTextObject)
 		local Settings = Environment.Properties.ESP
 
 		local Position, Size, OnScreen = CoreFunctions.CalculateParameters(Entry)
@@ -690,128 +678,6 @@ local UpdatingFunctions = {
 				SetRenderProperty(OutlineObject, "Transparency", Settings.Transparency)
 			end
 		end
-	end,
-
-	Chams = function(Entry, Part, Cham)
-		local Settings = Environment.Properties.Chams
-
-		if not (Part and Cham and Entry) then
-			return
-		end
-
-		local ChamsEnabled, ESPEnabled = Settings.Enabled, Environment.Settings.Enabled
-		local IsReady = Entry.Checks.Ready
-
-		local ConvertVector = CoreFunctions.ConvertVector
-
-		local _CFrame, PartSize = select(2, pcall(function()
-			return __index(Part, "CFrame"), __index(Part, "Size") / 2
-		end))
-
-		local Quads = {
-			Quad1Object = Cham.Quad1.__OBJECT,
-			Quad2Object = Cham.Quad2.__OBJECT,
-			Quad3Object = Cham.Quad3.__OBJECT,
-			Quad4Object = Cham.Quad4.__OBJECT,
-			Quad5Object = Cham.Quad5.__OBJECT,
-			Quad6Object = Cham.Quad6.__OBJECT
-		}
-
-		local Visibility = function(Value)
-			for Index = 1, 6 do
-				local RenderObject = Quads["Quad"..Index.."Object"]
-
-				SetRenderProperty(RenderObject, "Visible", Value)
-			end
-		end
-
-		if not (ChamsEnabled and ESPEnabled and IsReady and _CFrame and PartSize and not select(2, WorldToViewportPoint(_CFrame.Position))) then
-			return Visibility(false) -- TODO: Fix the cham's visibility not changing when the player is off screen.
-		end
-
-		for Index, Value in next, Settings do
-			if Index == "Enabled" then
-				Index, Value = "Visible", ChamsEnabled and ESPEnabled and IsReady
-			elseif Index == "Color" then
-				Value = CoreFunctions.GetColor(Entry.Object, Settings.RainbowColor and CoreFunctions.GetRainbowColor() or Settings.Color)
-			end
-
-			if not pcall(GetRenderProperty, Quads.Quad1Object, Index) then
-				continue
-			end
-
-			for _, RenderObject in next, Quads do
-				SetRenderProperty(RenderObject, Index, Value)
-			end
-		end
-
-		local Positions = {
-
-			--// Quad 1 - Front
-
-			{
-				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, PartSize.Y, PartSize.Z).Position), -- Top Left
-				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, PartSize.Y, PartSize.Z).Position), -- Top Right
-				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, -PartSize.Y, PartSize.Z).Position), -- Bottom Left
-				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, -PartSize.Y, PartSize.Z).Position) -- Bottom Right
-			},
-
-
-			--// Quad 2 - Back
-
-			{
-				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, PartSize.Y, -PartSize.Z).Position), -- Top Left
-				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, PartSize.Y, -PartSize.Z).Position), -- Top Right
-				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, -PartSize.Y, -PartSize.Z).Position), -- Bottom Left
-				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, -PartSize.Y, -PartSize.Z).Position) -- Bottom Right
-			},
-
-			--// Quad 3 - Top
-
-			{
-				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, PartSize.Y, PartSize.Z).Position), -- Top Left
-				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, PartSize.Y, PartSize.Z).Position), -- Top Right
-				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, PartSize.Y, -PartSize.Z).Position), -- Bottom Left
-				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, PartSize.Y, -PartSize.Z).Position) -- Bottom Right
-			},
-
-			--// Quad 4 - Bottom
-
-			{
-				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, -PartSize.Y, PartSize.Z).Position), -- Top Left
-				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, -PartSize.Y, PartSize.Z).Position), -- Top Right
-				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, -PartSize.Y, -PartSize.Z).Position), -- Bottom Left
-				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, -PartSize.Y, -PartSize.Z).Position) -- Bottom Right
-			},
-
-			--// Quad 5 - Right
-
-			{
-				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, PartSize.Y, PartSize.Z).Position), -- Top Left
-				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, PartSize.Y, -PartSize.Z).Position), -- Top Right
-				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, -PartSize.Y, PartSize.Z).Position), -- Bottom Left
-				WorldToViewportPoint(_CFrame * CFramenew(PartSize.X, -PartSize.Y, -PartSize.Z).Position) -- Bottom Right
-			},
-
-			--// Quad 6 - Left
-
-			{
-				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, PartSize.Y, PartSize.Z).Position), -- Top Left
-				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, PartSize.Y, -PartSize.Z).Position), -- Top Right
-				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, -PartSize.Y, PartSize.Z).Position), -- Bottom Left
-				WorldToViewportPoint(_CFrame * CFramenew(-PartSize.X, -PartSize.Y, -PartSize.Z).Position) -- Bottom Right
-			}
-		}
-
-		local Indexes = {1, 3, 4, 2}
-
-		for Index = 1, 6 do
-			local RenderObject = Quads["Quad"..Index.."Object"]
-
-			for _Index = 1, 4 do
-				SetRenderProperty(RenderObject, "Point"..stringchar(_Index + 64), ConvertVector(Positions[Index][Indexes[_Index]]))
-			end
-		end
 	end
 }
 
@@ -1041,112 +907,6 @@ local CreatingFunctions = {
 			else
 				SetRenderProperty(MainObject, "Visible", false)
 				SetRenderProperty(OutlineObject, "Visible", false)
-			end
-		end)
-	end,
-
-	Chams = function(self, Entry) -- TODO: Fix unwrapping & wrapping upon joining for new players.
-		local Allowed = Entry.Allowed
-
-		if type(Allowed) == "table" and type(Allowed.Chams) == "boolean" and not Allowed.Chams then
-			return
-		end
-
-		local Object = Entry.Object
-		local RigType = Entry.RigType
-		local ChamsEntry = Entry.Visuals.Chams
-
-		local PlayerCharacter = Entry.IsAPlayer and __index(Object, "Character")
-
-		local Settings = Environment.Properties.Chams
-
-		local Cancel, UnconfirmedRigType = false, RigType == "N/A"
-
-		if UnconfirmedRigType and PlayerCharacter then
-			RigType = (FindFirstChild(PlayerCharacter, "UpperTorso") or WaitForChild(PlayerCharacter, "LowerTorso", Inf)) and "R15" or FindFirstChild(PlayerCharacter, "Torso") and "R6" or "N/A"
-		end
-
-		if RigType == "N/A" then
-			xpcall(function()
-				ChamsEntry[__index(Object, "Name")] = {}
-			end, function()
-				Cancel = true
-			end)
-		else
-			ChamsEntry = RigType == "R15" and {
-				Head = {},
-				UpperTorso = {}, LowerTorso = {},
-				LeftLowerArm = {}, LeftUpperArm = {}, LeftHand = {},
-				RightLowerArm = {}, RightUpperArm = {}, RightHand = {},
-				LeftLowerLeg = {}, LeftUpperLeg = {}, LeftFoot = {},
-				RightLowerLeg = {}, RightUpperLeg = {}, RightFoot = {}
-			} or RigType == "R6" and { -- TODO: Fix support for R6 character rigs.
-				Head = {},
-				Torso = {},
-				["Left Arm"] = {},
-				["Right Arm"] = {},
-				["Left Leg"] = {},
-				["Right Leg"] = {}
-			}
-		end
-
-		if not type(ChamsEntry) == "table" or not ChamsEntry or Cancel then
-			xpcall(function()
-				if RigType == "N/A" then
-					return self:Chams(Entry)
-				end
-			end, function()
-				warn("EXUNYS_ESP > CreatingFunctions.Chams (Critical Chams Error) - Couldn't identify Humanoid Rig Type for user \""..Entry.Name.."\". Aborted rendering.")
-			end)
-
-			return
-		end
-
-		for _, Value in next, ChamsEntry do
-			for Index = 1, 6 do
-				Value["Quad"..Index] = Drawingnew("Quad")
-			end
-		end
-
-		local Visibility = function(Value)
-			for _, _Value in next, ChamsEntry do
-				for Index = 1, 6 do
-					SetRenderProperty(_Value["Quad"..Index].__OBJECT, "Visible", Value)
-				end
-			end
-		end
-
-		Entry.Connections.Chams = Connect(__index(RunService, Environment.DeveloperSettings.UpdateMode), function()
-			local Functionable, Ready = pcall(function()
-				return Environment.Settings.Enabled and Settings.Enabled and Entry.Checks.Ready
-			end)
-
-			if not Functionable then
-				for Index, Value in next, ChamsEntry do
-					pcall(Value.Remove, Value)
-				end
-
-				return Disconnect(Entry.Connections.Chams)
-			end
-
-			if Ready then
-				local Character = PlayerCharacter or __index(Object, "Parent")
-
-				if Character and IsDescendantOf(Character, Workspace) then
-					for Index, Value in next, ChamsEntry do
-						local Part = WaitForChild(Character, Index, Inf)
-
-						if Part and IsDescendantOf(Part, Workspace) then
-							UpdatingFunctions.Chams(Entry, Part, Value)
-						else
-							Visibility(false)
-						end
-					end
-				else
-					Visibility(false)
-				end
-			else
-				Visibility(false)
 			end
 		end)
 	end,
@@ -1495,8 +1255,7 @@ local UtilityFunctions = {
 				Tracer = {},
 				Box = {},
 				HealthBar = {},
-				HeadDot = {},
-				Chams = {}
+				HeadDot = {}
 			},
 
 			Connections = {}
@@ -1524,14 +1283,17 @@ local UtilityFunctions = {
 		Entry.PartHasCharacter = not Entry.IsAPlayer and Humanoid
 		Entry.RigType = Humanoid and (__index(Humanoid, "RigType") == 0 and "R6" or "R15") or "N/A"
 
+		self:InitChecks(Entry)
+
+		repeat
+			wait(0)
+		until Entry.Checks.Ready
+		
 		CreatingFunctions.ESP(Entry)
 		CreatingFunctions.Tracer(Entry)
 		CreatingFunctions.HeadDot(Entry)
 		CreatingFunctions.Box(Entry)
 		CreatingFunctions.HealthBar(Entry)
-		CreatingFunctions:Chams(Entry)
-
-		self:InitChecks(Entry)
 
 		WrappedObjects[Entry.Hash] = Entry
 
