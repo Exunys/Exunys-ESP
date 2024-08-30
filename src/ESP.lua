@@ -359,7 +359,7 @@ local CoreFunctions = {
 		end
 	end,
 
-CalculateParameters = function(Object)
+	CalculateParameters = function(Object)
 		Object = type(Object) == "table" and Object.Object or Object
 
 		local DeveloperSettings = Environment.DeveloperSettings
