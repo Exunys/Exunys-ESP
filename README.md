@@ -19,7 +19,7 @@ This project has been written and tested with Synapse X and Electron. However, I
 
 <details> <summary> Dependencies (required functions & libraries): </summary>
 
-- Libraries:
+- Libraries & Methods:
     - **Drawing**
         - Drawing.new *(function)*
         - Drawing.Fonts *(table)*
@@ -76,21 +76,18 @@ You can reuse or integrate this script or any system from this project into your
 
 # 📋 Documentation
 
-### The documentation for the interactive functions of this module can be found by clicking [here](https://exunys.gitbook.io/exunys-esp-documentation/) or at the following link:
-### https://exunys.gitbook.io/exunys-esp-documentation/
-
-More detailed information for this project will be documented by time in this README.md document.
+### The documentation for the methods of this module can be found [here](https://exunys.gitbook.io/exunys-esp-documentation/).
 
 # 👋 Introduction
 
 First of all, to implement the module in your script's environment you must use the function `loadstring` like below:
 ```lua
 local ESPLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Exunys-ESP/main/src/ESP.lua"))()
--- ESPLibrary and ExunysDeveloperESP is equivalent
+-- ESPLibrary and getgenv().ExunysDeveloperESP is equivalent.
 ```
-The code above loads the module's environment in your script executor's global environment meaning it will be achivable across every script.
+The code above loads the module's environment in your script executor's global environment meaning it will be achievable across every script.
 
-The identificator for the environment is `ExunysDeveloperESP` which is a table that has configurable settings and interactive user functions.
+The identificator for the environment is `ExunysDeveloperESP` which is a table that has configurable settings and interactive methods.
 
 The table loaded into the exploit's global environment by the module has a [*metatable*](https://create.roblox.com/docs/scripting/luau/metatables) set to it with a **__call** metamethod, meaning you can call the table which would wrap every player in the game and render a crosshair.
 ```lua
@@ -98,7 +95,7 @@ ExunysDeveloperESP()
 -- or
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Exunys-ESP/main/src/ESP.lua"))()()
 ```
-This is equivalent to the `Load` function (which would be more optimized and faster).
+This is a pointer to the `Load` method. Loading the module this way would be a faster alternative.
 ```lua
 ExunysDeveloperESP.Load()
 ```
@@ -306,11 +303,11 @@ Unwrapping objects:
 ```
 
 ### ❗ Notice
-It is more recommended you store & parse hashes (given from the WrapObject function) for unwrapping for more precise results.
+It is more recommended you store & parse hashes (given from the `WrapObject` method) for unwrapping the proxies with precise results.
 
-For players, the function `WrapObject` will only wrap & work on the parsed player object *(class type: "**Player**")* if the player has a character achievable by `OBJECT.Character`.
+For players, the method `WrapObject` will only wrap & work on the parsed player object *(class type: "**Player**")* if the player has a character achievable by `OBJECT.Character`.
 
-<details> <summary> Code example </summary>
+<details> <summary> Example program showcasing the part ESP - (WrapObject & UnwrapObject) </summary>
 
 ```lua
 for Index, Value in next, workspace.Landmines:GetChildren() do
@@ -322,9 +319,7 @@ for Index, Value in next, workspace.Landmines:GetChildren() do
     
 	local Hash = ExunysDeveloperESP:WrapObject(Part, "Landmine "..Index, {Tracer = false})
 
-	task.delay(3, function()
-		ExunysDeveloperESP.UnwrapObject(Hash)
-	end)
+	task.delay(3, ExunysDeveloperESP.UnwrapObject, Hash)
 end
 ```
 
@@ -332,9 +327,9 @@ https://user-images.githubusercontent.com/76539058/232627964-8230c006-770c-4f8a-
 
 </details>
 
-These 2 functions also apply to players & NPCs (anything with a character).
+These 2 methods also apply to players & NPCs (anything with a character).
 
-<details> <summary> Code example </summary>
+<details> <summary> Example program showcasing the ESP Module for NPCs </summary>
 
 ```lua
 ExunysDeveloperESP:WrapObject(workspace.Dummys.Dummy, "Dumb Dummy")
