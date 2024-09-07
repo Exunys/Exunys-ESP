@@ -1131,11 +1131,13 @@ local UtilityFunctions = {
 
 		local DeveloperSettings = Environment.DeveloperSettings
 
+		local LocalCharacterPosition = CoreFunctions.GetLocalCharacterPosition()
+
 		Entry.Connections.UpdateChecks = Connect(__index(RunService, DeveloperSettings.UpdateMode), function()
 			local RenderDistance = Entry.RenderDistance
 
 			if not IsAPlayer and not Entry.PartHasCharacter then -- Part
-				Checks.Ready = (__index(Player, "Position") - CoreFunctions.GetLocalCharacterPosition()).Magnitude <= RenderDistance; return
+				Checks.Ready = (__index(Player, "Position") - LocalCharacterPosition).Magnitude <= RenderDistance; return
 			end
 
 			local PartHumanoid = FindFirstChildOfClass(__index(Player, "Parent"), "Humanoid")
@@ -1151,7 +1153,7 @@ local UtilityFunctions = {
 					Checks.Alive = __index(PartHumanoid, "Health") > 0
 				end
 
-				local IsInDistance = (__index(PartHumanoid and __index(Player, "PrimaryPart"), "Position") - CoreFunctions.GetLocalCharacterPosition()).Magnitude <= RenderDistance
+				local IsInDistance = (__index(PartHumanoid and __index(Player, "PrimaryPart"), "Position") - LocalCharacterPosition).Magnitude <= RenderDistance
 					
 				Checks.Ready = Checks.Ready and Checks.Alive and IsInDistance
 
@@ -1178,7 +1180,7 @@ local UtilityFunctions = {
 					Checks.Team = __index(Player, TeamCheckOption) ~= __index(LocalPlayer, TeamCheckOption)
 				end
 
-				IsInDistance = (__index(Head, "Position") - CoreFunctions.GetLocalCharacterPosition()).Magnitude <= RenderDistance
+				IsInDistance = (__index(Head, "Position") - LocalCharacterPosition).Magnitude <= RenderDistance
 			else
 				Checks.Alive = false
 				Checks.Team = false
@@ -1285,25 +1287,27 @@ local UtilityFunctions = {
 
 		self:InitChecks(Entry)
 
-		repeat
-			wait(0)
-		until Entry.Checks.Ready
-		
-		CreatingFunctions.ESP(Entry)
-		CreatingFunctions.Tracer(Entry)
-		CreatingFunctions.HeadDot(Entry)
-		CreatingFunctions.Box(Entry)
-		CreatingFunctions.HealthBar(Entry)
+		spawn(function()
+			repeat
+				wait(0)
+			until Entry.Checks.Ready
+			
+			CreatingFunctions.ESP(Entry)
+			CreatingFunctions.Tracer(Entry)
+			CreatingFunctions.HeadDot(Entry)
+			CreatingFunctions.Box(Entry)
+			CreatingFunctions.HealthBar(Entry)
 
-		WrappedObjects[Entry.Hash] = Entry
+			WrappedObjects[Entry.Hash] = Entry
 
-		Entry.Connections.PlayerUnwrapSignal = Connect(Entry.Object.Changed, function(Property)
-			if DeveloperSettings.UnwrapOnCharacterAbsence and Property == "Parent" and not IsDescendantOf(__index(Entry.Object, (Entry.IsAPlayer and "Character" or Property)), Workspace) then
-				self.UnwrapObject(nil, Entry.Hash)
-			end
+			Entry.Connections.PlayerUnwrapSignal = Connect(Entry.Object.Changed, function(Property)
+				if DeveloperSettings.UnwrapOnCharacterAbsence and Property == "Parent" and not IsDescendantOf(__index(Entry.Object, (Entry.IsAPlayer and "Character" or Property)), Workspace) then
+					self.UnwrapObject(nil, Entry.Hash)
+				end
+			end)
+
+			return Entry.Hash
 		end)
-
-		return Entry.Hash
 	end,
 
 	UnwrapObject = function(Object, Hash)
