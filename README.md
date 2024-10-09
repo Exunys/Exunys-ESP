@@ -74,6 +74,10 @@ You can reuse or integrate this script or any system from this project into your
 
 - [**v1.1.6b**] Shelved chams & bug fixes </details>
 
+<details> <summary> 09/10/2024 </summary>
+
+- [**v1.1.6b**] Shelved screen resolution stretching, bug fixes, brought back chams. </details>
+
 # 📋 Documentation
 
 ### The documentation for the methods of this module can be found [here](https://exunys.gitbook.io/exunys-esp-documentation/).
@@ -204,6 +208,17 @@ getgenv().ExunysDeveloperESP = {
 
 			OutlineColor = Color3.fromRGB(0, 0, 0),
 			Outline = true
+		},
+
+
+		Chams = {
+			Enabled = true,
+			RainbowColor = false,
+
+			Color = Color3fromRGB(255, 255, 255),
+			Transparency = 0.2,
+			Thickness = 1,
+			Filled = false
 		},
 
 		Crosshair = {
