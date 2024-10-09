@@ -19,6 +19,16 @@ end, clonefunction or function(...)
 	return ...
 end
 
+--// Custom Drawing Library
+
+if not Drawing or not Drawing.new or not Drawing.Fonts then
+	loadstring(game.HttpGet(game, "https://pastebin.com/raw/huyiRsK0"))()
+
+	repeat
+		wait(0)
+	until Drawing and Drawing.new and type(Drawing.new) == "function" and Drawing.Fonts and type(Drawing.Fonts) == "table"
+end
+
 local ConfigLibrary = loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/Exunys/Config-Library/main/Main.lua"))()
 
 local Vector2new, Vector3zero, CFramenew = Vector2.new, Vector3.zero, CFrame.new
@@ -113,10 +123,18 @@ if not Degrade then
 	SetRenderProperty = getupvalue(getmetatable(TemporaryDrawing).__newindex, 4)
 	TemporaryDrawing.Remove(TemporaryDrawing)
 else
-	local _Drawingnew = clonefunction(Drawingnew)
+	local DrawQuad = loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/Exunys/Custom-Quad-Render-Object/main/Main.lua"))() -- Custom Quad Drawing Object
+	local _Drawingnew = clonefunction(Drawing.new)
 
-	Drawingnew = function(...)
-		return setmetatable({
+	local TemporaryDrawing = Drawingnew("Line")
+	local Executor = identifyexecutor()
+	local SupportsObject, RenderObjectMetatable = (stringfind(Executor, "Wave") or stringfind(Executor, "Synapse Z")) or TemporaryDrawing.__OBJECT
+
+	TemporaryDrawing.Remove(TemporaryDrawing)
+
+	Drawingnew = SupportsObject and _Drawingnew or function(...)
+		return ({...})[1] == "Quad" and DrawQuad(...) or setmetatable({
+			__OBJECT_EXISTS = true,
 			__OBJECT = _Drawingnew(...),
 
 			Remove = function(self)
@@ -124,7 +142,7 @@ else
 			end
 		}, {
 			__index = function(self, Index)
-				return self.__OBJECT[Index]
+				return self[Index]
 			end,
 
 			__newindex = function(self, Index, Value)
@@ -133,8 +151,11 @@ else
 		})
 	end
 
-	local TemporaryDrawing = Drawingnew("Line")
-	GetRenderProperty, SetRenderProperty = __index, getmetatable(TemporaryDrawing).__newindex -- Must use the "__OBJECT" element for either of these functions.
+	TemporaryDrawing = Drawingnew("Line")
+	RenderObjectMetatable = getmetatable(TemporaryDrawing)
+
+	GetRenderProperty, SetRenderProperty = RenderObjectMetatable.__index, RenderObjectMetatable.__newindex -- Must use the "__OBJECT" element for either of these functions otherwise you get a stack overflow.
+
 	TemporaryDrawing.Remove(TemporaryDrawing)
 
 	warn("EXUNYS_ESP > Your exploit does not support this module's optimizations! The visuals might be laggy and decrease performance.")
@@ -169,9 +190,7 @@ getgenv().ExunysDeveloperESP = {
 		AliveCheck = true,
 		LoadConfigOnLaunch = true,
 		EnableTeamColors = false,
-		TeamColor = Color3fromRGB(170, 170, 255),
-		StretchScreenResoultion = false,
-		StretchAmount = 0.75
+		TeamColor = Color3fromRGB(170, 170, 255)
 	},
 
 	Properties = {
@@ -251,6 +270,16 @@ getgenv().ExunysDeveloperESP = {
 
 			OutlineColor = Color3fromRGB(0, 0, 0),
 			Outline = true
+		},
+
+		Chams = {
+			Enabled = false,
+			RainbowColor = false,
+
+			Color = Color3fromRGB(255, 255, 255),
+			Transparency = 0.2,
+			Thickness = 1,
+			Filled = false
 		},
 
 		Crosshair = {
@@ -351,14 +380,6 @@ local CoreFunctions = {
 		return Result
 	end,
 
-	SetStretch = function()
-		local Settings = Environment.Settings
-
-		if Settings.StretchScreenResoultion then
-			CurrentCamera.CFrame *= CFramenew(0, 0, 0, 1, 0, 0, 0, Settings.StretchAmount, 0, 0, 0, 1)
-		end
-	end,
-
 	CalculateParameters = function(Object)
 		Object = type(Object) == "table" and Object.Object or Object
 
@@ -399,6 +420,68 @@ local CoreFunctions = {
 		local Settings, TeamCheckOption = Environment.Settings, Environment.DeveloperSettings.TeamCheckOption
 
 		return Settings.EnableTeamColors and __index(Player, TeamCheckOption) == __index(LocalPlayer, TeamCheckOption) and Settings.TeamColor or DefaultColor
+	end,
+
+	Calculate3DQuad = function(_CFrame, SizeVector, YVector)
+		YVector = YVector or SizeVector
+
+		return {
+
+			--// Quad 1 - Front
+
+			{
+				WorldToViewportPoint(_CFrame * CFramenew(SizeVector.X, YVector.Y, SizeVector.Z).Position), -- Top Left
+				WorldToViewportPoint(_CFrame * CFramenew(-SizeVector.X, YVector.Y, SizeVector.Z).Position), -- Top Right
+				WorldToViewportPoint(_CFrame * CFramenew(SizeVector.X, -YVector.Y, SizeVector.Z).Position), -- Bottom Left
+				WorldToViewportPoint(_CFrame * CFramenew(-SizeVector.X, -YVector.Y, SizeVector.Z).Position) -- Bottom Right
+			},
+
+
+			--// Quad 2 - Back
+
+			{
+				WorldToViewportPoint(_CFrame * CFramenew(SizeVector.X, YVector.Y, -SizeVector.Z).Position), -- Top Left
+				WorldToViewportPoint(_CFrame * CFramenew(-SizeVector.X, YVector.Y, -SizeVector.Z).Position), -- Top Right
+				WorldToViewportPoint(_CFrame * CFramenew(SizeVector.X, -YVector.Y, -SizeVector.Z).Position), -- Bottom Left
+				WorldToViewportPoint(_CFrame * CFramenew(-SizeVector.X, -YVector.Y, -SizeVector.Z).Position) -- Bottom Right
+			},
+
+			--// Quad 3 - Top
+
+			{
+				WorldToViewportPoint(_CFrame * CFramenew(SizeVector.X, YVector.Y, SizeVector.Z).Position), -- Top Left
+				WorldToViewportPoint(_CFrame * CFramenew(-SizeVector.X, YVector.Y, SizeVector.Z).Position), -- Top Right
+				WorldToViewportPoint(_CFrame * CFramenew(SizeVector.X, YVector.Y, -SizeVector.Z).Position), -- Bottom Left
+				WorldToViewportPoint(_CFrame * CFramenew(-SizeVector.X, YVector.Y, -SizeVector.Z).Position) -- Bottom Right
+			},
+
+			--// Quad 4 - Bottom
+
+			{
+				WorldToViewportPoint(_CFrame * CFramenew(SizeVector.X, -YVector.Y, SizeVector.Z).Position), -- Top Left
+				WorldToViewportPoint(_CFrame * CFramenew(-SizeVector.X, -YVector.Y, SizeVector.Z).Position), -- Top Right
+				WorldToViewportPoint(_CFrame * CFramenew(SizeVector.X, -YVector.Y, -SizeVector.Z).Position), -- Bottom Left
+				WorldToViewportPoint(_CFrame * CFramenew(-SizeVector.X, -YVector.Y, -SizeVector.Z).Position) -- Bottom Right
+			},
+
+			--// Quad 5 - Right
+
+			{
+				WorldToViewportPoint(_CFrame * CFramenew(SizeVector.X, YVector.Y, SizeVector.Z).Position), -- Top Left
+				WorldToViewportPoint(_CFrame * CFramenew(SizeVector.X, YVector.Y, -SizeVector.Z).Position), -- Top Right
+				WorldToViewportPoint(_CFrame * CFramenew(SizeVector.X, -YVector.Y, SizeVector.Z).Position), -- Bottom Left
+				WorldToViewportPoint(_CFrame * CFramenew(SizeVector.X, -YVector.Y, -SizeVector.Z).Position) -- Bottom Right
+			},
+
+			--// Quad 6 - Left
+
+			{
+				WorldToViewportPoint(_CFrame * CFramenew(-SizeVector.X, YVector.Y, SizeVector.Z).Position), -- Top Left
+				WorldToViewportPoint(_CFrame * CFramenew(-SizeVector.X, YVector.Y, -SizeVector.Z).Position), -- Top Right
+				WorldToViewportPoint(_CFrame * CFramenew(-SizeVector.X, -YVector.Y, SizeVector.Z).Position), -- Bottom Left
+				WorldToViewportPoint(_CFrame * CFramenew(-SizeVector.X, -YVector.Y, -SizeVector.Z).Position) -- Bottom Right
+			}
+		}
 	end
 }
 
@@ -678,6 +761,66 @@ local UpdatingFunctions = {
 				SetRenderProperty(OutlineObject, "Transparency", Settings.Transparency)
 			end
 		end
+	end,
+
+	Chams = function(Entry, Part, Cham)
+		local Settings = Environment.Properties.Chams
+
+		if not (Part and Cham and Entry) then
+			return
+		end
+
+		local ChamsEnabled, ESPEnabled = Settings.Enabled, Environment.Settings.Enabled
+		local IsReady = Entry.Checks.Ready
+
+		local ConvertVector = CoreFunctions.ConvertVector
+
+		local _CFrame, PartSize = select(2, pcall(function()
+			return __index(Part, "CFrame"), __index(Part, "Size") / 2
+		end))
+
+		if not (ChamsEnabled and ESPEnabled and IsReady and _CFrame and PartSize and select(2, WorldToViewportPoint(_CFrame.Position))) then
+			for Index = 1, 6 do
+				SetRenderProperty(Cham["Quad"..Index], "Visible", false)
+			end
+
+			return
+		end
+
+		local Quads = {
+			Quad1Object = Cham.Quad1,
+			Quad2Object = Cham.Quad2,
+			Quad3Object = Cham.Quad3,
+			Quad4Object = Cham.Quad4,
+			Quad5Object = Cham.Quad5,
+			Quad6Object = Cham.Quad6
+		}
+
+		for Index, Value in next, Settings do
+			if Index == "Enabled" then
+				Index, Value = "Visible", ChamsEnabled and ESPEnabled and IsReady
+			elseif Index == "Color" then
+				Value = CoreFunctions.GetColor(Entry.Object, Settings.RainbowColor and CoreFunctions.GetRainbowColor() or Settings.Color)
+			end
+
+			if not pcall(GetRenderProperty, Quads.Quad1Object, Index) then
+				continue
+			end
+
+			for _, RenderObject in next, Quads do
+				SetRenderProperty(RenderObject, Index, Value)
+			end
+		end
+
+		local Indexes, Positions = {1, 3, 4, 2}, CoreFunctions.Calculate3DQuad(_CFrame, PartSize)
+
+		for Index = 1, 6 do
+			local RenderObject = Quads["Quad"..Index.."Object"]
+
+			for _Index = 1, 4 do
+				SetRenderProperty(RenderObject, "Point"..stringchar(_Index + 64), ConvertVector(Positions[Index][Indexes[_Index]]))
+			end
+		end
 	end
 }
 
@@ -907,6 +1050,105 @@ local CreatingFunctions = {
 			else
 				SetRenderProperty(MainObject, "Visible", false)
 				SetRenderProperty(OutlineObject, "Visible", false)
+			end
+		end)
+	end,
+
+	Chams = function(self, Entry)
+		local Allowed = Entry.Allowed
+
+		if type(Allowed) == "table" and type(Allowed.Chams) == "boolean" and not Allowed.Chams then
+			return
+		end
+
+		local Object = Entry.Object
+		local RigType = Entry.RigType
+		local IsAPlayer = Entry.IsAPlayer
+
+		local ChamsEntry = {}
+
+		local PlayerCharacter = IsAPlayer and __index(Object, "Character")
+
+		local Settings = Environment.Properties.Chams
+
+		local Cancel, UnconfirmedRigType = false, RigType == "N/A"
+
+		if UnconfirmedRigType and PlayerCharacter then
+			RigType = (FindFirstChild(PlayerCharacter, "UpperTorso") or WaitForChild(PlayerCharacter, "LowerTorso", Inf)) and "R15" or FindFirstChild(PlayerCharacter, "Torso") and "R6" or "N/A"
+		end
+
+		if RigType == "N/A" then
+			ChamsEntry[__index(Object, "Name")] = {}
+		else
+			ChamsEntry = RigType == "R15" and {
+				Head = {},
+				UpperTorso = {}, LowerTorso = {},
+				LeftLowerArm = {}, LeftUpperArm = {}, LeftHand = {},
+				RightLowerArm = {}, RightUpperArm = {}, RightHand = {},
+				LeftLowerLeg = {}, LeftUpperLeg = {}, LeftFoot = {},
+				RightLowerLeg = {}, RightUpperLeg = {}, RightFoot = {}
+			} or RigType == "R6" and {
+				Head = {},
+				Torso = {},
+				["Left Arm"] = {},
+				["Right Arm"] = {},
+				["Left Leg"] = {},
+				["Right Leg"] = {}
+			}
+		end
+
+		Entry.Visuals.Chams = ChamsEntry
+
+		local ChamsEntryObjects = {}
+
+		for _Index, Value in next, ChamsEntry do
+			ChamsEntryObjects[_Index] = {}
+
+			for Index = 1, 6 do
+				Value["Quad"..Index] = Drawingnew("Quad")
+				ChamsEntryObjects[_Index]["Quad"..Index] = Value["Quad"..Index]
+			end
+		end
+
+		local Visibility = function(Value)
+			for _, _Value in next, ChamsEntryObjects do
+				for Index = 1, 6 do
+					SetRenderProperty(_Value["Quad"..Index], "Visible", Value)
+				end
+			end
+		end
+
+		Entry.Connections.Chams = Connect(__index(RunService, Environment.DeveloperSettings.UpdateMode), function()
+			local Functionable, Ready = pcall(function()
+				return Environment.Settings.Enabled and Settings.Enabled and Entry.Checks.Ready
+			end)
+
+			if not Functionable then
+				for Index, Value in next, ChamsEntry do
+					pcall(Value.Remove, Value)
+				end
+
+				return Disconnect(Entry.Connections.Chams)
+			end
+
+			if Ready then
+				local Character = PlayerCharacter or __index(Object, "Parent")
+
+				if Character and IsDescendantOf(Character, Workspace) then
+					for Index, Value in next, ChamsEntryObjects do
+						local Part = WaitForChild(Character, Index, Inf)
+
+						if Part and IsDescendantOf(Part, Workspace) then
+							UpdatingFunctions.Chams(Entry, Part, Value)
+						else
+							Visibility(false)
+						end
+					end
+				else
+					Visibility(false)
+				end
+			else
+				Visibility(false)
 			end
 		end)
 	end,
@@ -1154,7 +1396,7 @@ local UtilityFunctions = {
 				end
 
 				local IsInDistance = (__index(PartHumanoid and __index(Player, "PrimaryPart"), "Position") - LocalCharacterPosition).Magnitude <= RenderDistance
-					
+
 				Checks.Ready = Checks.Ready and Checks.Alive and IsInDistance
 
 				return
@@ -1257,7 +1499,8 @@ local UtilityFunctions = {
 				Tracer = {},
 				Box = {},
 				HealthBar = {},
-				HeadDot = {}
+				HeadDot = {},
+				Chams = {}
 			},
 
 			Connections = {}
@@ -1291,12 +1534,13 @@ local UtilityFunctions = {
 			repeat
 				wait(0)
 			until Entry.Checks.Ready
-			
+
 			CreatingFunctions.ESP(Entry)
 			CreatingFunctions.Tracer(Entry)
 			CreatingFunctions.HeadDot(Entry)
 			CreatingFunctions.Box(Entry)
 			CreatingFunctions.HealthBar(Entry)
+			CreatingFunctions:Chams(Entry)
 
 			WrappedObjects[Entry.Hash] = Entry
 
@@ -1392,12 +1636,7 @@ local LoadESP = function()
 				end
 			end)
 		end
-
-
-		Disconnect(ServiceConnections.SetStretch); ServiceConnections.SetStretch = Connect(__index(RunService, Environment.DeveloperSettings.UpdateMode), CoreFunctions.SetStretch)
 	end)
-
-	Disconnect(ServiceConnections.SetStretch); ServiceConnections.SetStretch = Connect(__index(RunService, Environment.DeveloperSettings.UpdateMode), CoreFunctions.SetStretch)
 end
 
 setmetatable(Environment, {
@@ -1463,10 +1702,6 @@ Environment.Restart = function(self) -- METHOD | (<void>) => <void>
 
 	for Index, Value in next, Objects do
 		self.WrapObject(select(2, unpack(Value)))
-
-		if Index == #Objects then
-			Environment.UtilityAssets.ServiceConnections.SetStretch = Connect(__index(RunService, Environment.DeveloperSettings.UpdateMode), CoreFunctions.SetStretch)
-		end
 	end
 
 	if CrosshairParts.LeftLine then
@@ -1585,7 +1820,5 @@ Environment.SaveConfiguration = function(self) -- METHOD | (<void>) => <void>
 		Properties = self.Properties
 	})
 end
-
-Environment.UtilityAssets.ServiceConnections.SetStretch = Connect(__index(RunService, Environment.DeveloperSettings.UpdateMode), CoreFunctions.SetStretch)
 
 return Environment
