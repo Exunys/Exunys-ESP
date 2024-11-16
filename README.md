@@ -10,10 +10,6 @@ This project has been inspired from [AirHub](https://github.com/Exunys/AirHub) w
 
 This project is used in the new [AirHub V2](https://github.com/Exunys/AirHub-V2) where you can use and edit the configuration through a GUI (it also includes a really fast Aimbot).
 
-The **chams** element from this module has been shelved. If you want to use an even more premium version of this module (sadly you cannot integrate it, made specifically for exploiting) refer to Exunys's most recent project, [X-Ro](https://x-ro.cc) which also features more optimizations, working chams, skeleton ESP and highlights.
-
-![image](https://github.com/user-attachments/assets/157ff74f-3af0-4d86-8a5e-11139532973c)
-
 ### ❗ Notice
 This project has been written and tested with Synapse X and Electron. However, I will do my best to modularize support for every exploit. So far, the required functions for this module to run are listed below:
 
@@ -32,6 +28,9 @@ This project has been written and tested with Synapse X and Electron. However, I
     - **gethiddenproperty**
     - **cloneref**
     - **clonefunction**
+    - **setrenderproperty**
+    - **getrenderproperty**
+    - **cleardrawcache**
 </details>
 
 This project also uses [Exunys' Config Library](https://github.com/Exunys/Config-Library) as a way of storing user settings, meaning, your script executor must support the dependencies for the module if you want the *configuration storing & loading functions* in the ESP module to function.
@@ -76,7 +75,11 @@ You can reuse or integrate this script or any system from this project into your
 
 <details> <summary> 09/10/2024 </summary>
 
-- [**v1.1.6b**] Shelved screen resolution stretching, bug fixes, brought back chams. </details>
+- [**v1.1.6b**] Shelved screen resolution stretching, bug fixes, brought back chams </details>
+
+<details> <summary> 16/11/2024 </summary>
+
+- [**v1.1.8b**] Bug fixes, logic improvements & minor optimizations. </details>
 
 # 📋 Documentation
 
@@ -270,6 +273,14 @@ getgenv().ExunysDeveloperESP = {
 	-- The rest is core data for the functionality of the module...
 }
 ```
+
+### NOTE: Do not execute this code, it is attached here as an example, executing this would rewrite the environment and critical core data for the ESP to function. Instead if you want to change some setting make sure you use the example below:
+
+```lua
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Exunys-ESP/main/src/ESP.lua"))()
+ExunysDeveloperESP.Settings.Enabled = false
+```
+
 </details>
 
 <details> <summary> Previews </summary>
