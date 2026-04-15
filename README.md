@@ -1,6 +1,6 @@
 # 🌌 Exunys ESP [![Visitors](https://visitor-badge.laobi.icu/badge?page_id=Exunys.Exunys-ESP)](https://exunys.gitbook.io/exunys-esp-documentation)
 
-This project represents a collection of visuals / wall hacks (Tracers, ESP, Boxes, Head Dots & Crosshair). This script is also undetected because it uses [Synapse X's Drawing Library](https://docs.synapse.to/docs/reference/drawing_lib.html). It has modulized support for NPCs & parts and it offers a very simple and easy to use wrapping and unwrapping system.
+This project represents a collection of visuals / wall hacks (Tracers, ESP, Boxes, Head Dots & Crosshair). This script is also undetected because it uses [Synapse X's Drawing Library](https://synapsexdocs.github.io/libraries/drawing). It has modulized support for NPCs & parts and it offers a very simple and easy to use wrapping and unwrapping system.
 
 This project's source is optimized, organized and simplified to the maximal level to be executive, fast, stable and precise.
 
@@ -75,11 +75,29 @@ You can reuse or integrate this script or any system from this project into your
 
 <details> <summary> 09/10/2024 </summary>
 
-- [**v1.1.6b**] Shelved screen resolution stretching, bug fixes, brought back chams </details>
+- [**v1.1.7b**] Shelved screen resolution stretching, bug fixes, brought back chams </details>
 
 <details> <summary> 16/11/2024 </summary>
 
 - [**v1.1.8b**] Bug fixes, logic improvements & minor optimizations. </details>
+
+<details> <summary> 16/04/2026 </summary>
+
+- [**v1.3b**]
+	- First of all, lots of logic improvements and bug fixes.
+	- New **Skeleton visual** (R6 & R15).
+	- New **Highlights visual**. Use this instead of the **Chams visual** for better performance. **WARNING! THIS FEATURE IS VERY UNSAFE AND CAN BE DETECTED.**
+	- Implemented Luraph Macros (for whatever reason you would need these if you want to copy the source).
+	- Source optimizations and performance enhancing options (throttling and position caching).
+	- Added global caching of the frame and camera parameters. This reduces the updating speed of the visuals but massively improves performance.
+	- **ESP visual** optimizations such as distance throttling (66% slower update speed of the bottom text) and caching both of the labels' content (string caching) to reduce garbage collection pressure. Please note these optimizations are the best I could do and if it is still laggy it is because of your script execution engine.
+	- Entity ESP / Wrapping - Everything that is / has a humanoid gets wrapped.
+	- Buffed up introspection to further prevent unexpected failures.
+	- New `RelativeFontSize` property for the **ESP visual** - Font size changes depending on the player's distance. Looks better for longer distances.
+	- New **Box visual** types: *Square*, *Quad / 3D Box* and *Corner*.
+	- New `FillSquare` property for the **Box visual**.
+	- New `Restart` method parameter `<bool> Rewrite Entries`. If you call this method and parse `true` as the first argument, the module does a hard restart removing all the entries and applying new hashes. Be warned that this method will remove any manually entered entries like parts and NPCs.
+	- Fixed support for Xeno and Solara. </details>
 
 # 📋 Documentation
 
@@ -116,10 +134,14 @@ getgenv().ExunysDeveloperESP = {
 	DeveloperSettings = {
 		Path = "Exunys Developer/Exunys ESP/Configuration.cfg",
 		UnwrapOnCharacterAbsence = false,
+		DisableWarnings = false,
 		UpdateMode = "RenderStepped",
 		TeamCheckOption = "TeamColor",
+		SkeletonR6HeightModifier = 0.35, -- 0.0 - 1.0
 		RainbowSpeed = 1, -- Bigger = Slower
-		WidthBoundary = 1.5 -- Smaller Value = Bigger Width
+		WidthBoundary = 1.5, -- Smaller value = Bigger width
+		Throttle = false, -- Update tankier functions less frequently. Instead of 60 updates per second, it will be around 30-40 updates per second. Helps preserve FPS.
+		ThrottleStep = 2 -- 2 - 4 - Higher value = Less updates.
 	},
 
 	Settings = {
@@ -127,11 +149,10 @@ getgenv().ExunysDeveloperESP = {
 		PartsOnly = false,
 		TeamCheck = false,
 		AliveCheck = true,
-		LoadConfigOnLaunch = true,
 		EnableTeamColors = false,
 		TeamColor = Color3.fromRGB(170, 170, 255),
-		StretchScreenResoultion = false,
-		StretchAmount = 0.75
+		CachePositions = true,
+		EntityESP = false
 	},
 
 	Properties = {
@@ -140,6 +161,7 @@ getgenv().ExunysDeveloperESP = {
 			RainbowColor = false,
 			RainbowOutlineColor = false,
 			Offset = 10,
+			RelativeFontSize = true, -- Font size changes depending on the player's distance. Looks better for longer distances.
 
 			Color = Color3.fromRGB(255, 255, 255),
 			Transparency = 1,
@@ -166,8 +188,8 @@ getgenv().ExunysDeveloperESP = {
 			Thickness = 1,
 			Color = Color3.fromRGB(255, 255, 255),
 
-			Outline = true,
-			OutlineColor = Color3.fromRGB(0, 0, 0)
+			OutlineColor = Color3.fromRGB(0, 0, 0),
+			Outline = true
 		},
 
 		HeadDot = {
@@ -181,7 +203,7 @@ getgenv().ExunysDeveloperESP = {
 			NumSides = 30,
 			Filled = false,
 
-			OutlineColor = Color3.fromRGB(0, 0, 0),
+			OutlineColor = Color3fromRGB(0, 0, 0),
 			Outline = true
 		},
 
@@ -190,10 +212,16 @@ getgenv().ExunysDeveloperESP = {
 			RainbowColor = false,
 			RainbowOutlineColor = false,
 
+			Type = 1, -- 1 = Square; 2 = Quad; 3 = Corner
+			FillSquare = true,
+			FillColor = Color3.fromRGB(255, 255, 255),
+			FillRainbowColor = false,
+			FillTransparency = 0.1,
+			LineSize = 14, -- For corner box option: Min = 2; Max = 20
+
 			Color = Color3.fromRGB(255, 255, 255),
 			Transparency = 1,
 			Thickness = 1,
-			Filled = false,
 
 			OutlineColor = Color3.fromRGB(0, 0, 0),
 			Outline = true
@@ -213,15 +241,38 @@ getgenv().ExunysDeveloperESP = {
 			Outline = true
 		},
 
-
 		Chams = {
-			Enabled = true,
+			Enabled = false,
 			RainbowColor = false,
 
-			Color = Color3fromRGB(255, 255, 255),
+			Color = Color3.fromRGB(255, 255, 255),
 			Transparency = 0.2,
 			Thickness = 1,
 			Filled = false
+		},
+
+		Skeleton = {
+			Enabled = false,
+			RainbowColor = false,
+
+			Transparency = 1,
+			Thickness = 1,
+			Color = Color3.fromRGB(255, 255, 255)
+		},
+
+		Highlight = {
+			Enabled = false,
+			RainbowColor = false,
+			RainbowOutlineColor = false,
+
+			DepthMode = Enum.HighlightDepthMode.AlwaysOnTop, -- AlwaysOnTop (0) / Occluded (1)
+			FillColor = Color3.fromRGB(255, 255, 255),
+			FillTransparency = 0.5,
+			HealthColor = false, -- Only works for Players / NPCs (Requires a Humanoid); Overrides "RainbowColor" property
+			HealthColorBlue = 100,
+
+			OutlineTransparency = 1,
+			OutlineColor = Color3.fromRGB(255, 255, 255)
 		},
 
 		Crosshair = {
@@ -268,7 +319,7 @@ getgenv().ExunysDeveloperESP = {
 				Outline = true
 			}
 		}
-	}
+	},
 
 	-- The rest is core data for the functionality of the module...
 }
