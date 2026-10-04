@@ -2220,7 +2220,7 @@ local UtilityFunctions; LPH_NO_VIRTUALIZE(function()
 		WrapObject = function(self, Object, PseudoName, Allowed, RenderDistance)
 			assert(self, "EXUNYS_ESP > UtilityFunctions.WrapObject - Internal error, unassigned parameter \"self\".")
 
-			--// Because gethiddenproperty behaves differently on Xeno, this part breaks the code. This is the universal solution.
+			--// Because gethiddenproperty behaves differently on Xeno and Solara, this part breaks the code. This is the universal solution.
 
 			-- if pcall(gethiddenproperty, Object, "PrimaryPart") then
 			-- 	Object = __index(Object, "PrimaryPart")
@@ -2231,12 +2231,12 @@ local UtilityFunctions; LPH_NO_VIRTUALIZE(function()
 
 				if Signal[1] and typeof(Signal[2]) ~= "number" then
 					if not IsA(Object, "Player") then
-						Object = __index(Object, "PrimaryPart")
+						Object = select(2, pcall(__index, Object, "PrimaryPart"))
 					end
 				end
 			end
 
-			if not Object then
+			if not Object or type(Object) == "string" then
 				return
 			end
 
