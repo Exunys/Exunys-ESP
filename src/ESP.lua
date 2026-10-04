@@ -2230,7 +2230,9 @@ local UtilityFunctions; LPH_NO_VIRTUALIZE(function()
 				local Signal = {pcall(gethiddenproperty, Object, "PrimaryPart")}
 
 				if Signal[1] and typeof(Signal[2]) ~= "number" then
-					Object = __index(Object, "PrimaryPart")
+					if not IsA(Object, "Player") then
+						Object = __index(Object, "PrimaryPart")
+					end
 				end
 			end
 
